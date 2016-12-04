@@ -1,4 +1,4 @@
-package com.haru2036.sleepchart.infra.service.Response
+package com.haru2036.sleepchart.infra.api
 
 import java.util.*
 

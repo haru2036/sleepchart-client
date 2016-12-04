@@ -6,6 +6,8 @@ import com.haru2036.sleepchart.di.component.AppComponent
 import com.haru2036.sleepchart.di.component.DaggerAppComponent
 import com.haru2036.sleepchart.di.module.AppModule
 
+
+
 open class SleepChart : Application(){
 
     companion object{
@@ -21,17 +23,21 @@ open class SleepChart : Application(){
         }
 
     }
+
     private lateinit var appComponent: AppComponent
 
     override fun onCreate() {
         super.onCreate()
-        application = this
         initializeDagger()
+        application = this
+
+
     }
 
     fun initializeDagger(){
         appComponent = DaggerAppComponent.builder()
                 .appModule(AppModule(this))
                 .build()
+        appComponent.inject(this)
     }
 }
