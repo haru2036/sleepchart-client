@@ -20,7 +20,7 @@ interface AppComponent{
 
     fun inject(sleepChart: SleepChart)
 
-    fun inject(context: Context)
+    fun inject(activity: MainActivity)
 
     fun inject(okHttpClient: OkHttpClient)
 
