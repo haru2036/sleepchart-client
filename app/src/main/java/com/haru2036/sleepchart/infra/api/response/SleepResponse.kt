@@ -1,7 +1,5 @@
-package com.haru2036.sleepchart.infra.api
-
-import java.util.*
+package com.haru2036.sleepchart.infra.api.response
 
 
-data class SleepResponse(val start: Date
-                        ,val end: Date)
+data class SleepResponse(val start: String
+                        ,val end: String)

@@ -1,6 +1,6 @@
 package com.haru2036.sleepchart.infra.api.service
 
-import com.haru2036.sleepchart.infra.api.SleepResponse
+import com.haru2036.sleepchart.infra.api.response.SleepResponse
 import retrofit2.http.GET
 import rx.Observable
 
@@ -9,5 +9,5 @@ import rx.Observable
  */
 interface SleepService {
     @GET("/sleeps")
-    fun sleeps(): Observable<SleepResponse>
+    fun sleeps(): Observable<List<SleepResponse>>
 }

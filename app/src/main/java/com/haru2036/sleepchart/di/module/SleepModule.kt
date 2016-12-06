@@ -8,13 +8,14 @@ import com.haru2036.sleepchart.infra.repository.SleepRepository
 import com.haru2036.sleepchart.presentation.activity.MainActivity
 import dagger.Module
 import dagger.Provides
+import retrofit2.Retrofit
 
 /**
  * Created by haru2036 on 2016/11/28.
  */
 
 @Module
-class SleepModule(){
+class SleepModule(val retrofit: Retrofit){
 
     @Provides
     fun provideSleepUseCase(sleepRepository: SleepRepository) = SleepUseCase(sleepRepository)
@@ -23,7 +24,7 @@ class SleepModule(){
     fun provideSleepRepository(sleepClient: SleepClient) = SleepRepository(sleepClient)
 
     @Provides
-    fun provideSleepClient(sleepService: SleepService) = SleepClient(sleepService)
+    fun provideSleepClient() = SleepClient(retrofit.create(SleepService::class.java))
 
 
 }

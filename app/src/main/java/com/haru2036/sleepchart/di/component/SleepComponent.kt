@@ -5,6 +5,7 @@ import com.haru2036.sleepchart.domain.usecase.SleepUseCase
 import com.haru2036.sleepchart.infra.api.client.SleepClient
 import com.haru2036.sleepchart.infra.api.service.SleepService
 import com.haru2036.sleepchart.infra.repository.SleepRepository
+import com.haru2036.sleepchart.presentation.activity.MainActivity
 import dagger.Subcomponent
 
 /**
@@ -21,6 +22,9 @@ interface SleepComponent{
     fun inject(sleepRepository: SleepRepository)
 
     fun inject(sleepClient: SleepClient)
+
+    fun inject(activity: MainActivity)
+
 
 
 }

@@ -10,5 +10,5 @@ import javax.inject.Singleton
  */
 @Singleton
 open class SleepClient @Inject constructor(private val service: SleepService){
-    open fun sleeps() = service.sleeps().map { SleepConverter.convert(it) }
+    open fun sleeps() = service.sleeps().map { it.map { SleepConverter.convert(it) } }
 }
