@@ -15,10 +15,17 @@ import com.haru2036.sleepchart.domain.entity.Sleep
 class MainSleepAdapter(context: Context, items:List<Sleep>) : ArrayAdapter<Sleep>(context, 0, items) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val binding = ItemSleepsBinding.inflate(layoutInflater, parent, false)
-        binding.sleep = getItem(position)
-        return binding.root
+        if(convertView != null && convertView.tag != null){
+            val binding = convertView.tag as ItemSleepsBinding
+             binding.sleep = getItem(position)
+            return binding.root
+        }else{
+            val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val binding = ItemSleepsBinding.inflate(layoutInflater, parent, false)
+            binding.sleep = getItem(position)
+            binding.root.tag = binding
+            return binding.root
+        }
     }
     
 
