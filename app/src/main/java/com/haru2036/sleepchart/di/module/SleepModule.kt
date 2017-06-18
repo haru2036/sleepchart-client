@@ -15,7 +15,7 @@ import retrofit2.Retrofit
  */
 
 @Module
-class SleepModule(val retrofit: Retrofit){
+class SleepModule(private val retrofit: Retrofit){
 
     @Provides
     fun provideSleepUseCase(sleepRepository: SleepRepository) = SleepUseCase(sleepRepository)

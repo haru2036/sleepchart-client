@@ -1,10 +1,9 @@
 package com.haru2036.sleepchart.presentation.activity
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ListView
-import android.widget.TextView
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.SleepModule
@@ -13,7 +12,6 @@ import com.haru2036.sleepchart.presentation.adapter.MainSleepAdapter
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import rx.subscriptions.CompositeSubscription
-import timber.log.Timber
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -38,7 +36,7 @@ class MainActivity : AppCompatActivity() {
                 .subscribe({
                     Log.d(it.toString(), it.toString())
                     listView.adapter = MainSleepAdapter(this, it)
-                },{
+                }, {
                     Log.e(it.toString(), it.toString())
                 })
         )
