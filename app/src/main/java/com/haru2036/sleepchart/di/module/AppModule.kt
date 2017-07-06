@@ -34,7 +34,7 @@ class AppModule(private val application: SleepChart){
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient) = Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("")
+            .baseUrl("http://192.168.1.30")
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
