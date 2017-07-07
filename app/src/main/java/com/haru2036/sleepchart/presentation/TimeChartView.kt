@@ -2,7 +2,6 @@ package com.haru2036.sleepchart.presentation
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -12,7 +11,7 @@ import com.haru2036.sleepchart.domain.entity.Sleep
 import java.text.SimpleDateFormat
 import java.util.*
 
-class TimeChartView : RelativeLayout {
+class TimeChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : RelativeLayout(context, attrs, defStyleAttr) {
     val dayInMillsec: Long = 86400 * 1000
     //18時始まりにするためのオフセット
     val nightOffsetPx: Double by lazy { measureTimeToPx(Date(9 * 60 * 60 * 1000 + currentTimeZoneOffsetFromUtc().toLong()), windowWidth) }
@@ -23,23 +22,11 @@ class TimeChartView : RelativeLayout {
         invalidate()
     }
 
-    @JvmOverloads
-    public constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr) {
-    }
-
-    override fun onAttachedToWindow() {
-        super.onAttachedToWindow()
-    }
-
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         windowWidth = View.MeasureSpec.getSize(widthMeasureSpec)
         sleeps.map{layoutSingleItem(it)}
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-    }
-
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        super.onLayout(changed, l, t, r, b)
     }
 
     fun layoutSingleItem(sleep: Sleep){
