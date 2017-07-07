@@ -28,13 +28,12 @@ class SleepChartAdapter(val context: Context, val items: List<Pair<Date, List<Sl
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         val view = holder?.itemView as TimeChartView
-        view.setSleeps(items[position].second)
+        view.sleeps = items[position].second
 
     }
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
         super.onAttachedToRecyclerView(recyclerView)
-        //todo 画面幅入れる
     }
 
     class ViewHolder constructor(row: TimeChartView): RecyclerView.ViewHolder(row){

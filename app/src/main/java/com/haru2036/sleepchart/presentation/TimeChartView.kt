@@ -13,18 +13,29 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TimeChartView : RelativeLayout {
-    var parentWidth: Int? = 1920
     val dayInMillsec: Long = 86400 * 1000
     //18時始まりにするためのオフセット
-    val nightOffsetPx: Double by lazy { measureTimeToPx(Date(9 * 60 * 60 * 1000 + currentTimeZoneOffsetFromUtc().toLong())) }
-
-    fun setSleeps(sleeps: List<Sleep>) {
-        sleeps.map { layoutSingleItem(it) }
+    val nightOffsetPx: Double by lazy { measureTimeToPx(Date(9 * 60 * 60 * 1000 + currentTimeZoneOffsetFromUtc().toLong()), windowWidth) }
+    var windowWidth = 0
+    var sleeps: List<Sleep> = emptyList()
+    set(value) {
+        field = value
         invalidate()
     }
 
     @JvmOverloads
     public constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr) {
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        windowWidth = View.MeasureSpec.getSize(widthMeasureSpec)
+        sleeps.map{layoutSingleItem(it)}
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
@@ -34,8 +45,8 @@ class TimeChartView : RelativeLayout {
     fun layoutSingleItem(sleep: Sleep){
         val startTime = timeOfDay(sleep.start)
         val endTime = shiftToEpoch(sleep.end, startTime)
-        val startPx = measureTimeToPx(startTime) - nightOffsetPx
-        val endPx = measureTimeToPx(endTime) - nightOffsetPx
+        val startPx = measureTimeToPx(startTime, windowWidth) - nightOffsetPx
+        val endPx = measureTimeToPx(endTime, windowWidth) - nightOffsetPx
 
         val longPx = endPx - startPx
 
@@ -90,10 +101,10 @@ class TimeChartView : RelativeLayout {
     }
 
     //todo なまえ
-    fun measureTimeToPx(timeOfDay: Date) = if(parentWidth != 0 && timeOfDay.time != 0L) {
-        timeOfDay.time * ((parentWidth!!.toDouble()) / dayInMillsec.toDouble())
+    fun measureTimeToPx(timeOfDay: Date, parentWidth: Int) = if(parentWidth != 0 && timeOfDay.time != 0L) {
+        timeOfDay.time * ((parentWidth.toDouble()) / dayInMillsec.toDouble())
     }else{
-        throw IllegalStateException("width must not be 0")
+        0.0
     }
 
 }
