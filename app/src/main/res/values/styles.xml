@@ -8,4 +8,11 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppWakeTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorWakePrimary</item>
+        <item name="colorPrimaryDark">@color/colorWakePrimaryDark</item>
+        <item name="colorAccent">@color/colorWakeAccent</item>
+    </style>
+
 </resources>

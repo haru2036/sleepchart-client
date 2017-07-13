@@ -18,9 +18,9 @@ import java.util.*
  * Created by haru2036 on 2017/07/05.
  */
 
-class SleepChartAdapter(val context: Context, val items: List<Pair<Date, List<Sleep>>>) : RecyclerView.Adapter<SleepChartAdapter.ViewHolder>() {
+class SleepChartAdapter(val context: Context) : RecyclerView.Adapter<SleepChartAdapter.ViewHolder>() {
     val inflater: LayoutInflater by lazy { LayoutInflater.from(context) }
-
+    var items: List<Sleep> = emptyList()
     override fun getItemCount(): Int = items.size
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder =
@@ -28,7 +28,8 @@ class SleepChartAdapter(val context: Context, val items: List<Pair<Date, List<Sl
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         val view = holder?.itemView as TimeChartView
-        view.sleeps = items[position].second
+        view.clearAllSleeps()
+        view.sleeps = listOf(items[position])
 
     }
 

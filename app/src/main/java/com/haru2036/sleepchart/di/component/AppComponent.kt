@@ -3,6 +3,7 @@ package com.haru2036.sleepchart.di.component
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.AppModule
 import com.haru2036.sleepchart.di.module.SleepModule
+import com.haru2036.sleepchart.domain.entity.OrmaDatabase
 import dagger.Component
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

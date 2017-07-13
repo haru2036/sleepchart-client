@@ -9,5 +9,5 @@ import java.text.SimpleDateFormat
  * Created by haru2036 on 2016/11/28.
  */
 object SleepConverter {
-    fun convert(result: SleepResponse) = Sleep(result.start, result.end)
+    fun convert(result: SleepResponse) = Sleep(id = 0, start = result.start, end = result.end)
 }

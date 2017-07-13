@@ -29,6 +29,11 @@ class TimeChartView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     }
 
+    fun clearAllSleeps(){
+        removeAllViews()
+        sleeps = emptyList()
+    }
+
     fun layoutSingleItem(sleep: Sleep){
         val startTime = timeOfDay(sleep.start)
         val endTime = shiftToEpoch(sleep.end, startTime)

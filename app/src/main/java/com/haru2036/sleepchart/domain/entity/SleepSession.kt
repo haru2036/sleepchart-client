@@ -7,11 +7,9 @@ import com.github.gfx.android.orma.annotation.Table
 import java.util.*
 
 @Table
-data class Sleep(
-        @PrimaryKey(autoincrement = true) @Column
-        var id: Long,
-        @Column @Setter("start")
-        var start: Date,
-        @Column @Setter("end")
-        var end: Date
+data class SleepSession(
+    @PrimaryKey(autoincrement = true) @Column
+    var id: Long,
+    @Column @Setter("start")
+    var start: Date
 )

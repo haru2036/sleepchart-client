@@ -8,6 +8,6 @@ import rx.Observable
  * Created by haru2036 on 16/11/08.
  */
 interface SleepService {
-    @GET("/sleeps")
+    @GET("/sleepSessions")
     fun sleeps(): Observable<List<SleepResponse>>
 }

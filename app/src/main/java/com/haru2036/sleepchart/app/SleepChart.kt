@@ -2,6 +2,7 @@ package com.haru2036.sleepchart.app
 
 import android.app.Application
 import android.content.Context
+import com.facebook.stetho.Stetho
 import com.haru2036.sleepchart.di.component.AppComponent
 import com.haru2036.sleepchart.di.component.DaggerAppComponent
 import com.haru2036.sleepchart.di.module.AppModule
@@ -35,7 +36,7 @@ open class SleepChart : Application(){
         super.onCreate()
         initializeDagger()
         application = this
-
+        Stetho.initializeWithDefaults(this);
 
     }
 

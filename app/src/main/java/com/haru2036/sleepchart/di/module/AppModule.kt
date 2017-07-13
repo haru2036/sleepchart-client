@@ -1,13 +1,18 @@
 package com.haru2036.sleepchart.di.module
 
 import android.content.Context
+import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.haru2036.sleepchart.app.SleepChart
+import com.haru2036.sleepchart.di.OrmaHandler
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import com.haru2036.sleepchart.domain.entity.OrmaDatabase
+
+
 
 @Module
 class AppModule(private val application: SleepChart){
@@ -27,7 +32,7 @@ class AppModule(private val application: SleepChart){
                     val maxAge = 60
                     request.addHeader("cache-control", "public, max-age=" + maxAge)
                     chain.proceed(request?.build())
-                }
+                }.addNetworkInterceptor(StethoInterceptor())
                 .build()
     }
 
@@ -38,6 +43,10 @@ class AppModule(private val application: SleepChart){
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
+
+    @Provides
+    fun provideOrmaDatabase(context: Context): OrmaHandler = OrmaHandler(context)
+
 
 
 }
