@@ -77,7 +77,6 @@ class SleepChartFragment : Fragment(){
 
     fun toggleSleep(){
         sleepUsecase.logSleepToggle(Calendar.getInstance().time)
-                .delay(300, TimeUnit.MILLISECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({

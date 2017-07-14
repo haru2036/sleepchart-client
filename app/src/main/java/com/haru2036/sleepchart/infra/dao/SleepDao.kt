@@ -5,6 +5,7 @@ import com.haru2036.sleepchart.domain.entity.OrmaDatabase
 import com.haru2036.sleepchart.domain.entity.Sleep
 import io.reactivex.Completable
 import io.reactivex.Observable
+import io.reactivex.Single
 import javax.inject.Inject
 
 /**
@@ -13,8 +14,8 @@ import javax.inject.Inject
 
 class SleepDao @Inject constructor(private val orma: OrmaHandler){
 
-    fun create(sleep: Sleep): Completable {
-        return Completable.create { orma.db.insertIntoSleep(sleep) }
+    fun create(sleep: Sleep): Single<Long>{
+        return orma.db.prepareInsertIntoSleep().executeAsSingle(sleep)
     }
 
     fun sleeps() = orma.db.selectFromSleep().executeAsObservable()

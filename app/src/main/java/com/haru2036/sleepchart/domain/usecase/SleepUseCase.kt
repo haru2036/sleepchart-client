@@ -3,6 +3,7 @@ package com.haru2036.sleepchart.domain.usecase
 import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.domain.entity.SleepSession
 import com.haru2036.sleepchart.infra.repository.SleepRepository
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.util.*
@@ -18,22 +19,20 @@ class SleepUseCase @Inject constructor(private val repository: SleepRepository) 
 
     fun isSleeping() = repository.findSleepSession().isEmpty.map { !it }
 
-    fun logSleepToggle(date: Date): Single<Boolean> {
-        return repository.findSleepSession().isEmpty.map { !it }.doOnSuccess{ isSleeping->
+    fun logSleepToggle(date: Date): Observable<Boolean> {
+        return repository.findSleepSession().isEmpty.map { !it }.flatMapObservable{ isSleeping ->
             if (!isSleeping) {
                 repository.createSleepSession(SleepSession(0, date))
+                        .toObservable()
+                        .map { isSleeping }
             } else {
                 repository.findSleepSession()
                         .observeOn(Schedulers.io())
                         .subscribeOn(Schedulers.io())
-                        .flatMapCompletable { sleepSession ->
+                        .flatMapSingle { sleepSession ->
                             repository.deleteSleepSession(sleepSession)
-                            repository.createSleep(Sleep(0, sleepSession.start, date)).andThen {
-                            }
-                        }.subscribe({
-
-                })
-
+                            repository.createSleep(Sleep(0, sleepSession.start, date))
+                        }.map { isSleeping }
             }
         }
     }
