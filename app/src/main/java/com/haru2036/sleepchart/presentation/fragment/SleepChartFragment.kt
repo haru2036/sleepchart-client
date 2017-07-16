@@ -3,7 +3,6 @@ package com.haru2036.sleepchart.presentation.fragment
 import android.app.Fragment
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -20,7 +19,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SleepChartFragment : Fragment(){
@@ -51,7 +49,7 @@ class SleepChartFragment : Fragment(){
                     setStateColors(it)
                 },
                 {
-
+                        Timber.e(it)
                 })
         chartRecyclerView.layoutManager = LinearLayoutManager(context).apply {
             orientation = LinearLayoutManager.VERTICAL
@@ -64,6 +62,7 @@ class SleepChartFragment : Fragment(){
     override fun onResume() {
         super.onResume()
     }
+
     fun showSleeps(){
         sleepUsecase.findSleeps().toList()
                 .observeOn(AndroidSchedulers.mainThread())

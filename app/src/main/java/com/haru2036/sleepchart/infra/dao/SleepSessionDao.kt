@@ -1,8 +1,6 @@
 package com.haru2036.sleepchart.infra.dao
 
 import com.haru2036.sleepchart.di.OrmaHandler
-import com.haru2036.sleepchart.domain.entity.OrmaDatabase
-import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.domain.entity.SleepSession
 import io.reactivex.Single
 import javax.inject.Inject

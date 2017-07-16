@@ -4,7 +4,6 @@ import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.domain.entity.SleepSession
 import com.haru2036.sleepchart.infra.repository.SleepRepository
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject

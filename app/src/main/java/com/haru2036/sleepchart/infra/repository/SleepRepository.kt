@@ -8,9 +8,6 @@ import com.haru2036.sleepchart.infra.dao.SleepSessionDao
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * Created by haru2036 on 2016/11/28.
- */
 @Singleton
 open class SleepRepository @Inject constructor(private val client: SleepClient,
                                                private val sleepDao: SleepDao,
