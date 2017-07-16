@@ -6,6 +6,7 @@ import com.facebook.stetho.Stetho
 import com.haru2036.sleepchart.di.component.AppComponent
 import com.haru2036.sleepchart.di.component.DaggerAppComponent
 import com.haru2036.sleepchart.di.module.AppModule
+import com.jakewharton.threetenabp.AndroidThreeTen
 import retrofit2.Retrofit
 import javax.inject.Inject
 
@@ -36,6 +37,7 @@ open class SleepChart : Application(){
         super.onCreate()
         initializeDagger()
         application = this
+        AndroidThreeTen.init(this)
         Stetho.initializeWithDefaults(this);
 
     }
