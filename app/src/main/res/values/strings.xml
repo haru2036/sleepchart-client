@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SleepChart</string>
+    <string name="export">書き出し</string>
+    <string name="choose_app">アプリを選択</string>
 </resources>

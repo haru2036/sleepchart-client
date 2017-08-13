@@ -13,7 +13,7 @@ import org.threeten.bp.ZoneId
 
 class SleepChartAdapter(val context: Context) : RecyclerView.Adapter<SleepChartAdapter.ViewHolder>() {
     private val inflater: LayoutInflater by lazy { LayoutInflater.from(context) }
-    private val nightOffset = 9L
+    private val nightOffset = 11L
     var items: List<Sleep> = emptyList()
     set(value){
         sleepsOfDays.clear()

@@ -2,13 +2,15 @@ package com.haru2036.sleepchart.presentation.activity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.presentation.fragment.SleepChartFragment
 import rx.subscriptions.CompositeSubscription
 
 class MainActivity : AppCompatActivity() {
 
-    val TAG = MainActivity::class.java.name
+    val fragment: SleepChartFragment by lazy { SleepChartFragment.newInstance() }
 
 
     val subscriptions = CompositeSubscription()
@@ -18,22 +20,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         if(savedInstanceState == null){
             fragmentManager.beginTransaction()
-                    .add(R.id.activity_main_fragment_container, SleepChartFragment.newInstance())
+                    .add(R.id.activity_main_fragment_container, fragment)
                     .commit()
         }
-//        val listView = findViewById(R.id.activity_main_list) as ListView
-//        SleepChart.getAppComponent().plus(SleepModule(SleepChart.getRetrofit())).inject(this)
-//        subscriptions.add(sleepUsecase.fetchSleeps()
-//                .delay(500, TimeUnit.MILLISECONDS)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe({
-//                    Log.d(it.toString(), it.toString())
-//                    listView.adapter = MainSleepAdapter(this, it)
-//                }, {
-//                    Log.e(it.toString(), it.toString())
-//                })
-//        )
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.activity_main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.menu_main_export -> fragment.exportChart()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onResume() {

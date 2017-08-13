@@ -14,7 +14,7 @@ import java.util.*
 class TimeChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : RelativeLayout(context, attrs, defStyleAttr) {
     val dayInMillsec: Long = 86400 * 1000
     //18時始まりにするためのオフセット
-    val nightOffsetPx: Double by lazy { measureTimeToPx(Date(9 * 60 * 60 * 1000 + currentTimeZoneOffsetFromUtc().toLong()), windowWidth) }
+    val nightOffsetPx: Double by lazy { measureTimeToPx(Date(11 * 60 * 60 * 1000 + currentTimeZoneOffsetFromUtc().toLong()), windowWidth) }
     var windowWidth = 0
     var sleeps: List<Sleep> = emptyList()
     set(value) {
