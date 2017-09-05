@@ -4,6 +4,7 @@ import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.AdapterView
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.presentation.TimeChartView
@@ -14,6 +15,7 @@ import org.threeten.bp.ZoneId
 class SleepChartAdapter(val context: Context) : RecyclerView.Adapter<SleepChartAdapter.ViewHolder>() {
     private val inflater: LayoutInflater by lazy { LayoutInflater.from(context) }
     private val nightOffset = 11L
+    var onItemClickListener: TimeChartView.OnItemClickListener? = null
     var items: List<Sleep> = emptyList()
     set(value){
         sleepsOfDays.clear()
@@ -39,6 +41,7 @@ class SleepChartAdapter(val context: Context) : RecyclerView.Adapter<SleepChartA
 
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         val view = holder?.itemView as TimeChartView
+        view.onItemClickListener = onItemClickListener
         view.clearAllSleeps()
         view.sleeps = sleepsOfDays.toList().get(position).second
 

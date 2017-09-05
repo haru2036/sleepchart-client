@@ -28,6 +28,8 @@ class TimeChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         invalidate()
     }
 
+    var onItemClickListener: OnItemClickListener? = null
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         windowWidth = View.MeasureSpec.getSize(widthMeasureSpec)
         sleeps.map{layoutSingleItem(it)}
@@ -64,6 +66,9 @@ class TimeChartView @JvmOverloads constructor(context: Context, attrs: Attribute
                 width = longPx
             }
         }
+        sleepView.setOnClickListener {
+            onItemClickListener?.onItemClick(sleep)
+        }
         addView(sleepView)
     }
 
@@ -83,4 +88,7 @@ class TimeChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         0
     }
 
+    interface OnItemClickListener{
+        fun onItemClick(sleep: Sleep)
+    }
 }

@@ -15,4 +15,5 @@ class SleepDao @Inject constructor(private val orma: OrmaHandler){
 
     fun sleeps() = orma.db.selectFromSleep().executeAsObservable()
 
+    fun getSleepById(id: Long) = orma.db.selectFromSleep().idEq(id).singleOrNull()
 }

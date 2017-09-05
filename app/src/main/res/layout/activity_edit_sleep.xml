@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.haru2036.sleepchart.presentation.viewmodel.EditSleepViewModel"
+        />
+    </data>
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.haru2036.sleepchart.presentation.TimeChartView
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.sleep.start.toString()}"
+                android:onClick="@{() -> viewModel.setStart()}"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.sleep.end.toString()}"
+            android:onClick="@{() -> viewModel.setEnd()}"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</layout>

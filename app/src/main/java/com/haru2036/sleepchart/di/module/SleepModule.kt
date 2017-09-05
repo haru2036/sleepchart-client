@@ -10,6 +10,7 @@ import com.haru2036.sleepchart.infra.dao.SleepDao
 import com.haru2036.sleepchart.infra.dao.SleepSessionDao
 import com.haru2036.sleepchart.infra.repository.SleepRepository
 import com.haru2036.sleepchart.presentation.activity.MainActivity
+import com.haru2036.sleepchart.presentation.viewmodel.EditSleepViewModel
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -35,6 +36,9 @@ class SleepModule{
 
     @Provides
     fun provideSleepClient(retrofit: Retrofit) = SleepClient(retrofit.create(SleepService::class.java))
+
+    @Provides
+    fun provideEditSleepViewModel(sleepUseCase: SleepUseCase) = EditSleepViewModel(sleepUseCase)
 
 
 }

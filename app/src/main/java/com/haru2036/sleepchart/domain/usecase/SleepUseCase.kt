@@ -37,4 +37,6 @@ class SleepUseCase @Inject constructor(private val repository: SleepRepository) 
     }
 
     fun saveSleep(sleep: Sleep) = repository.createSleep(sleep)
+
+    fun getSleep(id: Long) = repository.getSleepById(id)
 }

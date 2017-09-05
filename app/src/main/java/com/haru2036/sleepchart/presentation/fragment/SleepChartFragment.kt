@@ -8,8 +8,10 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.support.annotation.RequiresApi
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -22,7 +24,10 @@ import android.widget.Toast
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.SleepModule
+import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.domain.usecase.SleepUseCase
+import com.haru2036.sleepchart.presentation.TimeChartView
+import com.haru2036.sleepchart.presentation.activity.EditSleepActivity
 import com.haru2036.sleepchart.extensions.addTo
 import com.haru2036.sleepchart.presentation.adapter.SleepChartAdapter
 import com.tbruyelle.rxpermissions2.RxPermissions
@@ -72,7 +77,15 @@ class SleepChartFragment : Fragment(){
         chartRecyclerView.layoutManager = LinearLayoutManager(context).apply {
             orientation = LinearLayoutManager.VERTICAL
         }
-        chartRecyclerView.adapter = SleepChartAdapter(context)
+        chartRecyclerView.adapter = SleepChartAdapter(context).apply {
+            onItemClickListener = object : TimeChartView.OnItemClickListener {
+                @RequiresApi(Build.VERSION_CODES.HONEYCOMB)
+                override fun onItemClick(sleep: Sleep) {
+                    startActivity(EditSleepActivity.createIntent(context, sleep.id))
+                }
+            }
+        }
+
         showSleeps()
 
     }
@@ -144,7 +157,9 @@ class SleepChartFragment : Fragment(){
                     Toast.makeText(context, "Saved image to: file://$directory/$fileNameString.jpg", Toast.LENGTH_LONG).show()
                     Log.d("saved image:" , "file://$directory/$fileNameString.jpg")
                 }.addTo(disposables)
+    }
 
+    fun createNewSleep(){
     }
 
     fun setStateColors(isSleeping: Boolean){
@@ -156,6 +171,4 @@ class SleepChartFragment : Fragment(){
             fab.setImageDrawable(activity.getDrawable(R.drawable.ic_local_hotel_white_24dp))
         }
     }
-
-
 }
