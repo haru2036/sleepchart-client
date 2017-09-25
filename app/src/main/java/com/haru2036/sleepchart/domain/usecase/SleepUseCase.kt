@@ -8,9 +8,6 @@ import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
 
-/**
- * Created by haru2036 on 2016/11/28.
- */
 class SleepUseCase @Inject constructor(private val repository: SleepRepository) {
     fun fetchSleeps() = repository.fetchSleeps()
 

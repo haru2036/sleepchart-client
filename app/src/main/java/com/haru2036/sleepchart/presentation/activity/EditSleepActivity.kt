@@ -1,20 +1,24 @@
 package com.haru2036.sleepchart.presentation.activity
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.support.v4.app.FragmentActivity
+import android.os.Handler
+import android.os.HandlerThread
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.databinding.ActivityEditSleepBinding
 import com.haru2036.sleepchart.di.module.SleepModule
+import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.domain.usecase.SleepUseCase
 import com.haru2036.sleepchart.presentation.viewmodel.EditSleepViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 class EditSleepActivity : AppCompatActivity() {
@@ -28,20 +32,49 @@ class EditSleepActivity : AppCompatActivity() {
 
     companion object {
         fun createIntent(context: Context, sleepId: Long) = Intent(context, EditSleepActivity::class.java).apply {
-                putExtra("sleepId", sleepId)
-            }
+            putExtra("sleepId", sleepId)
+        }
+
+        fun createIntent(context: Context) = Intent(context, EditSleepActivity::class.java).apply {
+            putExtra("sleepId", -1L)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         SleepChart.getAppComponent().plus(SleepModule()).inject(this)
-        binding.viewModel = editSleepViewModel
-        val sleep = sleepUseCase.getSleep(intent.getLongExtra("sleepId", -1L))
-        if(sleep == null){
-            Toast.makeText(this, "Sleep not found", Toast.LENGTH_LONG).show()
-            finish()
-        }else{
-            binding.viewModel.sleep = sleep
+        val sleepId = intent.getLongExtra("sleepId", -2L)
+
+        if (sleepId == -1L) {
+            val handlerThreadForSave = HandlerThread("saveSleep")
+            handlerThreadForSave.start()
+            val handler = Handler(handlerThreadForSave.looper)
+            handler.post {
+                //ToDo:subscribeOn(Schedulers.io())してもmainThreadで走ってコケるのを治す
+                val newSleep = Sleep(0L, Calendar.getInstance(Locale.getDefault()).time, Calendar.getInstance(Locale.getDefault()).time)
+                sleepUseCase.saveSleep(newSleep)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .map { sleepUseCase.getSleep(it) !! }
+                        .subscribe({
+                            binding.viewModel = editSleepViewModel
+                            binding.viewModel.sleep = it
+                        }, {
+                            Timber.e(it)
+                            Toast.makeText(this@EditSleepActivity, it.message, Toast.LENGTH_LONG).show()
+                            finish()
+                        })
+
+            }
+        } else {
+            val sleep = sleepUseCase.getSleep(sleepId)
+            if (sleep == null) {
+                Toast.makeText(this, "Sleep not found", Toast.LENGTH_LONG).show()
+                finish()
+            } else {
+                binding.viewModel = editSleepViewModel
+                binding.viewModel.sleep = sleep
+            }
         }
     }
 }

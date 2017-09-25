@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Fragment
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
@@ -160,6 +159,7 @@ class SleepChartFragment : Fragment(){
     }
 
     fun createNewSleep(){
+        startActivity(EditSleepActivity.createIntent(context))
     }
 
     fun setStateColors(isSleeping: Boolean){
