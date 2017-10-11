@@ -4,8 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.os.Handler
-import android.os.HandlerThread
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.haru2036.sleepchart.R
@@ -46,26 +44,20 @@ class EditSleepActivity : AppCompatActivity() {
         val sleepId = intent.getLongExtra("sleepId", -2L)
 
         if (sleepId == -1L) {
-            val handlerThreadForSave = HandlerThread("saveSleep")
-            handlerThreadForSave.start()
-            val handler = Handler(handlerThreadForSave.looper)
-            handler.post {
-                //ToDo:subscribeOn(Schedulers.io())してもmainThreadで走ってコケるのを治す
-                val newSleep = Sleep(0L, Calendar.getInstance(Locale.getDefault()).time, Calendar.getInstance(Locale.getDefault()).time)
-                sleepUseCase.saveSleep(newSleep)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .map { sleepUseCase.getSleep(it) !! }
-                        .subscribe({
-                            binding.viewModel = editSleepViewModel
-                            binding.viewModel.sleep = it
-                        }, {
-                            Timber.e(it)
-                            Toast.makeText(this@EditSleepActivity, it.message, Toast.LENGTH_LONG).show()
-                            finish()
-                        })
+            val newSleep = Sleep(0L, Calendar.getInstance(Locale.getDefault()).time, Calendar.getInstance(Locale.getDefault()).time)
+            sleepUseCase.saveSleep(newSleep)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .map { sleepUseCase.getSleep(it) !! }
+                    .subscribe({
+                        binding.viewModel = editSleepViewModel
+                        binding.viewModel.sleep = it
+                    }, {
+                        Timber.e(it)
+                        Toast.makeText(this@EditSleepActivity, it.message, Toast.LENGTH_LONG).show()
+                        finish()
+                    })
 
-            }
         } else {
             val sleep = sleepUseCase.getSleep(sleepId)
             if (sleep == null) {
