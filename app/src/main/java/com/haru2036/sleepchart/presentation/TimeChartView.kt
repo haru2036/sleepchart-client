@@ -8,13 +8,19 @@ import android.widget.Button
 import android.widget.RelativeLayout
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.domain.entity.Sleep
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalTime
+import org.threeten.bp.ZoneId
+import org.threeten.bp.ZonedDateTime
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class TimeChartView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : RelativeLayout(context, attrs, defStyleAttr) {
-    val dayInMillsec: Long = 86400 * 1000
+
+    val dayInSec: Int = 86400
     //18時始まりにするためのオフセット
-    val nightOffsetPx: Double by lazy { measureTimeToPx(Date(11 * 60 * 60 * 1000 + currentTimeZoneOffsetFromUtc().toLong()), windowWidth) }
+    val nightOffsetHours: Int = 4
     var windowWidth = 0
     var sleeps: List<Sleep> = emptyList()
     set(value) {
@@ -35,10 +41,11 @@ class TimeChartView @JvmOverloads constructor(context: Context, attrs: Attribute
     }
 
     fun layoutSingleItem(sleep: Sleep){
-        val startTime = timeOfDay(sleep.start)
-        val endTime = shiftToEpoch(sleep.end, startTime)
-        val startPx = measureTimeToPx(startTime, windowWidth) - nightOffsetPx
-        val endPx = measureTimeToPx(endTime, windowWidth) - nightOffsetPx
+        //todo: Sleep等に使われている時刻をすべてJSR-310のやつにする
+        val startTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(sleep.start.time), ZoneId.systemDefault()).toLocalTime().plusHours(nightOffsetHours.toLong())
+        val endTime = ZonedDateTime.ofInstant(Instant.ofEpochMilli(sleep.end.time), ZoneId.systemDefault()).toLocalTime().plusHours(nightOffsetHours.toLong())
+        val startPx = measureTimeToPx(startTime, windowWidth)
+        val endPx = measureTimeToPx(endTime, windowWidth)
 
         val longPx = endPx - startPx
 
@@ -46,15 +53,15 @@ class TimeChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         sleepView.setBackgroundColor(context.getColor(R.color.sleepColor))
         sleepView.text = SimpleDateFormat("MM/dd HH:mm ~", Locale.JAPAN).format(sleep.start)
         val layoutParams = if(sleepView.layoutParams == null){
-            RelativeLayout.LayoutParams(longPx.toInt(), ViewGroup.LayoutParams.MATCH_PARENT)
+            RelativeLayout.LayoutParams(longPx, ViewGroup.LayoutParams.MATCH_PARENT)
         }else{
             sleepView.layoutParams
         }
         if(layoutParams is RelativeLayout.LayoutParams){
             sleepView.layoutParams  = layoutParams.apply {
-                leftMargin = startPx.toInt()
+                leftMargin = startPx
                 height = ViewGroup.LayoutParams.MATCH_PARENT
-                width = longPx.toInt()
+                width = longPx
             }
         }
         addView(sleepView)
@@ -68,35 +75,12 @@ class TimeChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         return offset
     }
 
-    fun timeOfDay(date: Date): Date{
-        val timeOnly = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
-            time = date
-            set(Calendar.DAY_OF_YEAR, 1)
-            set(Calendar.MONTH, 1)
-            set(Calendar.YEAR, 1970)
-            time = Date(time.time + currentTimeZoneOffsetFromUtc().toLong())
-        }.time
-        return timeOnly
-    }
-
-    fun shiftToEpoch(endDate: Date, base: Date): Date{
-        val endTime = timeOfDay(endDate)
-        return if(endTime < base){
-            //日付またいだときの処理
-            Calendar.getInstance().apply {
-                time = endTime
-                set(Calendar.DAY_OF_YEAR, 2)
-            }.time
-        }else{
-            endTime
-        }
-    }
 
     //todo なまえ
-    fun measureTimeToPx(timeOfDay: Date, parentWidth: Int) = if(parentWidth != 0 && timeOfDay.time != 0L) {
-        timeOfDay.time * ((parentWidth.toDouble()) / dayInMillsec.toDouble())
+    fun measureTimeToPx(timeOfDay: LocalTime, parentWidth: Int) = if(parentWidth != 0) {
+        (timeOfDay.toSecondOfDay() * (parentWidth.toDouble() / dayInSec.toDouble())).toInt()
     }else{
-        0.0
+        0
     }
 
 }
