@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.widget.LinearLayout
 import android.widget.Toast
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.app.SleepChart
@@ -34,8 +35,8 @@ import java.util.*
 import javax.inject.Inject
 
 class SleepChartFragment : Fragment(){
-    val chartRecyclerView: RecyclerView by lazy { view.findViewById(R.id.fragment_sleepchart_recyclerview) as RecyclerView }
-    val fab: FloatingActionButton by lazy { view.findViewById(R.id.fab) as FloatingActionButton}
+    val chartRecyclerView: RecyclerView by lazy { view.findViewById<RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
+    val fab: FloatingActionButton by lazy { view.findViewById<FloatingActionButton>(R.id.fab) }
 
     @Inject
     lateinit var sleepUsecase: SleepUseCase
@@ -110,7 +111,8 @@ class SleepChartFragment : Fragment(){
         RxPermissions(activity).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .filter { it }
                 .subscribe {
-                    val chartView = view.findViewById(R.id.fragment_sleepchart_main_container)
+
+                    val chartView = view.findViewById<LinearLayout>(R.id.fragment_sleepchart_main_container)
                     val bitmap = Bitmap.createBitmap(chartView.width, chartView.height, Bitmap.Config.ARGB_8888)
                     val canvas = Canvas(bitmap)
                     chartView.draw(canvas)
@@ -142,11 +144,9 @@ class SleepChartFragment : Fragment(){
 
     fun setStateColors(isSleeping: Boolean){
         if(isSleeping){
-            activity.theme.applyStyle(R.style.AppTheme, true)
             fab.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.colorAccent))
             fab.setImageDrawable(activity.getDrawable(R.drawable.ic_wb_sunny_white_24dp))
         }else{
-            activity.theme.applyStyle(R.style.AppWakeTheme, true)
             activity.setTheme(R.style.AppWakeTheme)
             fab.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.colorWakeAccent))
             fab.setImageDrawable(activity.getDrawable(R.drawable.ic_local_hotel_white_24dp))
