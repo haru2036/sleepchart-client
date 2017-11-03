@@ -37,6 +37,7 @@ import javax.inject.Inject
 class SleepChartFragment : Fragment(){
     val chartRecyclerView: RecyclerView by lazy { view.findViewById<RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
     val fab: FloatingActionButton by lazy { view.findViewById<FloatingActionButton>(R.id.fab) }
+    val chartView: LinearLayout by lazy { view.findViewById<LinearLayout>(R.id.fragment_sleepchart_main_container) }
 
     @Inject
     lateinit var sleepUsecase: SleepUseCase
@@ -112,7 +113,6 @@ class SleepChartFragment : Fragment(){
                 .filter { it }
                 .subscribe {
 
-                    val chartView = view.findViewById<LinearLayout>(R.id.fragment_sleepchart_main_container)
                     val bitmap = Bitmap.createBitmap(chartView.width, chartView.height, Bitmap.Config.ARGB_8888)
                     val canvas = Canvas(bitmap)
                     chartView.draw(canvas)

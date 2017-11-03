@@ -12,7 +12,6 @@ class MainActivity : AppCompatActivity() {
 
     val fragment: SleepChartFragment by lazy { SleepChartFragment.newInstance() }
 
-
     val subscriptions = CompositeSubscription()
 
     override fun onCreate(savedInstanceState: Bundle?) {
