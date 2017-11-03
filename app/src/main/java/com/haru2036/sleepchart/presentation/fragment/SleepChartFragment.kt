@@ -147,7 +147,6 @@ class SleepChartFragment : Fragment(){
             fab.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.colorAccent))
             fab.setImageDrawable(activity.getDrawable(R.drawable.ic_wb_sunny_white_24dp))
         }else{
-            activity.setTheme(R.style.AppWakeTheme)
             fab.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.colorWakeAccent))
             fab.setImageDrawable(activity.getDrawable(R.drawable.ic_local_hotel_white_24dp))
         }
