@@ -6,13 +6,10 @@ import android.view.Menu
 import android.view.MenuItem
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.presentation.fragment.SleepChartFragment
-import rx.subscriptions.CompositeSubscription
 
 class MainActivity : AppCompatActivity() {
 
     val fragment: SleepChartFragment by lazy { SleepChartFragment.newInstance() }
-
-    val subscriptions = CompositeSubscription()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,12 +33,4 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        subscriptions.unsubscribe()
-    }
 }

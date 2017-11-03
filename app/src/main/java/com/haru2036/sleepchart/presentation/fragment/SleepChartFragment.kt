@@ -23,9 +23,11 @@ import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.SleepModule
 import com.haru2036.sleepchart.domain.usecase.SleepUseCase
+import com.haru2036.sleepchart.extensions.addTo
 import com.haru2036.sleepchart.presentation.adapter.SleepChartAdapter
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.io.File
@@ -38,6 +40,8 @@ class SleepChartFragment : Fragment(){
     val chartRecyclerView: RecyclerView by lazy { view.findViewById<RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
     val fab: FloatingActionButton by lazy { view.findViewById<FloatingActionButton>(R.id.fab) }
     val chartView: LinearLayout by lazy { view.findViewById<LinearLayout>(R.id.fragment_sleepchart_main_container) }
+
+    val disposables: CompositeDisposable = CompositeDisposable()
 
     @Inject
     lateinit var sleepUsecase: SleepUseCase
@@ -64,7 +68,7 @@ class SleepChartFragment : Fragment(){
                 },
                 {
                         Timber.e(it)
-                })
+                }).addTo(disposables)
         chartRecyclerView.layoutManager = LinearLayoutManager(context).apply {
             orientation = LinearLayoutManager.VERTICAL
         }
@@ -73,8 +77,9 @@ class SleepChartFragment : Fragment(){
 
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onDestroy() {
+        disposables.dispose()
+        super.onDestroy()
     }
 
     fun showSleeps(){
@@ -85,7 +90,7 @@ class SleepChartFragment : Fragment(){
                     val adapter = chartRecyclerView.adapter as SleepChartAdapter
                     adapter.items = sleeps
                     adapter.notifyDataSetChanged()
-                }
+                }.addTo(disposables)
     }
 
     fun toggleSleep(){
@@ -103,7 +108,7 @@ class SleepChartFragment : Fragment(){
                 },
                 {
                     Timber.e(it)
-                })
+                }).addTo(disposables)
 
     }
 
@@ -138,7 +143,7 @@ class SleepChartFragment : Fragment(){
                     }
                     Toast.makeText(context, "Saved image to: file://$directory/$fileNameString.jpg", Toast.LENGTH_LONG).show()
                     Log.d("saved image:" , "file://$directory/$fileNameString.jpg")
-                }
+                }.addTo(disposables)
 
     }
 
