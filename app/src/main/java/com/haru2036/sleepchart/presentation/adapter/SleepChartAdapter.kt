@@ -9,6 +9,7 @@ import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.presentation.TimeChartView
 import org.threeten.bp.DateTimeUtils
 import org.threeten.bp.ZoneId
+import java.util.*
 
 
 class SleepChartAdapter(val context: Context) : RecyclerView.Adapter<SleepChartAdapter.ViewHolder>() {
@@ -40,13 +41,20 @@ class SleepChartAdapter(val context: Context) : RecyclerView.Adapter<SleepChartA
     override fun onBindViewHolder(holder: ViewHolder?, position: Int) {
         val view = holder?.itemView as TimeChartView
         view.clearAllSleeps()
-        view.sleeps = sleepsOfDays.toList().get(position).second
+        view.sleeps = sleepsOfDays.toList()[position].second
+        Calendar.getInstance().apply {
+            time = view.sleeps.first().end
 
-    }
-
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView?) {
-        super.onAttachedToRecyclerView(recyclerView)
+            val backgroundColor = context.getColor(
+                when (get(Calendar.DAY_OF_WEEK)){
+                    Calendar.SUNDAY -> R.color.sundayBackground
+                    Calendar.SATURDAY -> R.color.saturdayBackground
+                    else -> R.color.normalBackground
+                }
+            )
+            view.setBackgroundColor(backgroundColor)
+            view.invalidate()
+        }
     }
 
     class ViewHolder constructor(row: TimeChartView): RecyclerView.ViewHolder(row){
