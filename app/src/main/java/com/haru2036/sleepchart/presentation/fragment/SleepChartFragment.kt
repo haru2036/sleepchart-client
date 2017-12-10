@@ -36,11 +36,11 @@ import java.util.*
 import javax.inject.Inject
 
 class SleepChartFragment : Fragment(){
-    val chartRecyclerView: RecyclerView by lazy { view.findViewById<RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
-    val fab: FloatingActionButton by lazy { view.findViewById<FloatingActionButton>(R.id.fab) }
-    val chartView: LinearLayout by lazy { view.findViewById<LinearLayout>(R.id.fragment_sleepchart_main_container) }
+    private val chartRecyclerView: RecyclerView by lazy { view.findViewById<RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
+    private val fab: FloatingActionButton by lazy { view.findViewById<FloatingActionButton>(R.id.fab) }
+    private val chartView: LinearLayout by lazy { view.findViewById<LinearLayout>(R.id.fragment_sleepchart_main_container) }
 
-    val disposables: CompositeDisposable = CompositeDisposable()
+    private val disposables: CompositeDisposable = CompositeDisposable()
 
     @Inject
     lateinit var sleepUsecase: SleepUseCase
