@@ -9,6 +9,8 @@ import com.haru2036.sleepchart.di.module.AppModule
 import com.jakewharton.threetenabp.AndroidThreeTen
 import retrofit2.Retrofit
 import javax.inject.Inject
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 
 open class SleepChart : Application(){
@@ -39,6 +41,7 @@ open class SleepChart : Application(){
         application = this
         AndroidThreeTen.init(this)
         Stetho.initializeWithDefaults(this);
+        Fabric.with(this, Crashlytics())
 
     }
 
