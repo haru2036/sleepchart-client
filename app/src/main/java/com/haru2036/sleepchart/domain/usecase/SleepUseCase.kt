@@ -41,4 +41,6 @@ class SleepUseCase @Inject constructor(private val repository: SleepRepository) 
                 .toList()
                 .map { it.last().end }
                 .flatMap { repository.createSleep(Sleep(0, it, Calendar.getInstance().time)) }
+
+    fun deleteSleep(id: Long) = repository.deleteSleep(id)
 }

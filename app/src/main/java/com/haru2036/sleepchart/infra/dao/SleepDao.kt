@@ -10,6 +10,7 @@ import javax.inject.Inject
  */
 
 class SleepDao @Inject constructor(private val orma: OrmaHandler){
+    fun deleteById(id: Long) = orma.db.deleteFromSleep().idEq(id).executeAsSingle()
 
     fun create(sleep: Sleep): Single<Long> = orma.db.prepareInsertIntoSleepAsSingle().map { it.execute(sleep) }
 

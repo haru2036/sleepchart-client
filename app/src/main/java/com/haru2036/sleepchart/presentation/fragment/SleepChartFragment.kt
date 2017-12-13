@@ -17,6 +17,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.support.v7.widget.RecyclerView
+import android.support.design.widget.Snackbar
 import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -110,9 +111,9 @@ class SleepChartFragment : Fragment(){
                 .subscribe({
                     setStateColors(!it)
                     if(it){
-                        Toast.makeText(activity, "Good morning", Toast.LENGTH_LONG).show()
+                        Snackbar.make(view, R.string.good_morning, Snackbar.LENGTH_LONG).show()
                     }else{
-                        Toast.makeText(activity, "Good night", Toast.LENGTH_LONG).show()
+                        Snackbar.make(view, R.string.good_night, Snackbar.LENGTH_LONG).show()
                     }
                     showSleeps()
                 },
@@ -123,13 +124,28 @@ class SleepChartFragment : Fragment(){
     }
 
     private fun trackSleepTwice() = sleepUsecase.trackSleepTwice()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    showSleeps()
-                }, {
-                    Timber.e(it)
-                }).addTo(disposables)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe({ newId ->
+                Snackbar.make(view, R.string.sleep_twice_saved, Snackbar.LENGTH_LONG).apply {
+                    setAction(R.string.cancel, {
+                        sleepUsecase.deleteSleep(newId)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribeOn(Schedulers.io())
+                                .subscribe({
+                                    showSleeps()
+                                }, {
+                                    Timber.e(it)
+                                }).addTo(disposables)
+                        }
+                    )
+                    show()
+                }
+
+                showSleeps()
+            }, {
+                Timber.e(it)
+            }).addTo(disposables)
 
 
     fun exportChart(){
