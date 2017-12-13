@@ -2,6 +2,7 @@ package com.haru2036.sleepchart.presentation.fragment
 
 import android.Manifest
 import android.app.Fragment
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
@@ -9,6 +10,7 @@ import android.graphics.Canvas
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Vibrator
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -59,6 +61,7 @@ class SleepChartFragment : Fragment(){
     override fun onStart() {
         super.onStart()
         fab.setOnClickListener { toggleSleep() }
+
         sleepUsecase.isSleeping()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -68,9 +71,17 @@ class SleepChartFragment : Fragment(){
                 {
                         Timber.e(it)
                 }).addTo(disposables)
+
         chartRecyclerView.layoutManager = LinearLayoutManager(context).apply {
             orientation = LinearLayoutManager.VERTICAL
         }
+
+        fab.setOnLongClickListener {
+            val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            vibrator.vibrate(1000L)
+            trackSleepTwice()
+        }
+
         chartRecyclerView.adapter = SleepChartAdapter(context)
         showSleeps()
 
@@ -81,7 +92,7 @@ class SleepChartFragment : Fragment(){
         super.onDestroy()
     }
 
-    fun showSleeps(){
+    private fun showSleeps(){
         sleepUsecase.findSleeps().toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -92,7 +103,7 @@ class SleepChartFragment : Fragment(){
                 }.addTo(disposables)
     }
 
-    fun toggleSleep(){
+    private fun toggleSleep(){
         sleepUsecase.logSleepToggle(Calendar.getInstance().time)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -110,6 +121,16 @@ class SleepChartFragment : Fragment(){
                 }).addTo(disposables)
 
     }
+
+    private fun trackSleepTwice() = sleepUsecase.trackSleepTwice()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    showSleeps()
+                }, {
+                    Timber.e(it)
+                }).addTo(disposables)
+
 
     fun exportChart(){
 
