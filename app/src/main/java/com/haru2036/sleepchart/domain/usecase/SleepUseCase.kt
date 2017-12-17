@@ -4,6 +4,7 @@ import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.domain.entity.SleepSession
 import com.haru2036.sleepchart.infra.repository.SleepRepository
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
@@ -36,5 +37,10 @@ class SleepUseCase @Inject constructor(private val repository: SleepRepository) 
         }
     }
 
-    fun saveSleep(sleep: Sleep) = repository.createSleep(sleep)
+    fun trackSleepTwice(): Single<Long> = repository.findSleeps()
+                .toList()
+                .map { it.last().end }
+                .flatMap { repository.createSleep(Sleep(0, it, Calendar.getInstance().time)) }
+
+    fun deleteSleep(id: Long) = repository.deleteSleep(id)
 }
