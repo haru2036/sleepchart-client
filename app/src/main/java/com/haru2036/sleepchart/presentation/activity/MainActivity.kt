@@ -28,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
+            R.id.menu_main_import -> ImportActivity.start(this)
             R.id.menu_main_export -> fragment.exportChart()
         }
         return super.onOptionsItemSelected(item)

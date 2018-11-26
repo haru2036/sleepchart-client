@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">SleepChart</string>
-    <string name="export">書き出し</string>
+    <string name="menu_export">エクスポート</string>
+    <string name="menu_import">インポート</string>
     <string name="cancel">Cancel</string>
     <string name="choose_app">アプリを選択</string>
     <string name="good_night">おやすみなさい</string>
     <string name="good_morning">おはようございます</string>
     <string name="sleep_twice_saved">二度寝を記録しました</string>
+    <string name="title_activity_import">ImportActivity</string>
 </resources>
