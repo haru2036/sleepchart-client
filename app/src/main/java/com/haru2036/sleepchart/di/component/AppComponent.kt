@@ -2,7 +2,6 @@ package com.haru2036.sleepchart.di.component
 
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.AppModule
-import com.haru2036.sleepchart.di.module.GadgetBridgeModule
 import com.haru2036.sleepchart.di.module.SleepModule
 import dagger.Component
 import okhttp3.OkHttpClient
@@ -24,6 +23,4 @@ interface AppComponent{
     fun inject(retrofit: Retrofit)
 
     fun plus(sleepModule: SleepModule): SleepComponent
-
-    fun plus(gadgetBridgeModule: GadgetBridgeModule): GadgetBridgeComponent
 }

@@ -4,10 +4,13 @@ import com.haru2036.sleepchart.infra.api.client.SleepClient
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.OrmaHandler
 import com.haru2036.sleepchart.domain.entity.OrmaDatabase
+import com.haru2036.sleepchart.domain.usecase.GadgetBridgeUseCase
 import com.haru2036.sleepchart.domain.usecase.SleepUseCase
 import com.haru2036.sleepchart.infra.api.service.SleepService
+import com.haru2036.sleepchart.infra.dao.GadgetBridgeDao
 import com.haru2036.sleepchart.infra.dao.SleepDao
 import com.haru2036.sleepchart.infra.dao.SleepSessionDao
+import com.haru2036.sleepchart.infra.repository.GadgetBridgeRepository
 import com.haru2036.sleepchart.infra.repository.SleepRepository
 import com.haru2036.sleepchart.presentation.activity.MainActivity
 import dagger.Module
@@ -35,6 +38,15 @@ class SleepModule{
 
     @Provides
     fun provideSleepClient(retrofit: Retrofit) = SleepClient(retrofit.create(SleepService::class.java))
+
+    @Provides
+    fun provideGadgetBridgeDao() = GadgetBridgeDao()
+
+    @Provides
+    fun provideGadgetBridgeRepository(gadgetBridgeDao: GadgetBridgeDao) = GadgetBridgeRepository(gadgetBridgeDao)
+
+    @Provides
+    fun provideGadgetBridgeUseCase(gadgetBridgeRepository: GadgetBridgeRepository) = GadgetBridgeUseCase(gadgetBridgeRepository)
 
 
 }

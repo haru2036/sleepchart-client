@@ -1,10 +1,14 @@
 package com.haru2036.sleepchart.di.component
 
 import com.haru2036.sleepchart.di.module.SleepModule
+import com.haru2036.sleepchart.domain.usecase.GadgetBridgeUseCase
 import com.haru2036.sleepchart.domain.usecase.SleepUseCase
 import com.haru2036.sleepchart.infra.api.client.SleepClient
 import com.haru2036.sleepchart.infra.api.service.SleepService
+import com.haru2036.sleepchart.infra.dao.GadgetBridgeDao
+import com.haru2036.sleepchart.infra.repository.GadgetBridgeRepository
 import com.haru2036.sleepchart.infra.repository.SleepRepository
+import com.haru2036.sleepchart.presentation.activity.ImportActivity
 import com.haru2036.sleepchart.presentation.activity.MainActivity
 import com.haru2036.sleepchart.presentation.fragment.SleepChartFragment
 import dagger.Subcomponent
@@ -28,6 +32,13 @@ interface SleepComponent{
 
     fun inject(fragment: SleepChartFragment)
 
+    fun inject(gadgetBridgeUseCase: GadgetBridgeUseCase)
+
+    fun inject(gadgetBridgeRepository: GadgetBridgeRepository)
+
+    fun inject(gadgetBridgeDao: GadgetBridgeDao)
+
+    fun inject(activity: ImportActivity)
 
 
 }

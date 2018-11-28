@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.app.SleepChart
-import com.haru2036.sleepchart.di.module.GadgetBridgeModule
+import com.haru2036.sleepchart.di.module.SleepModule
 import com.haru2036.sleepchart.domain.usecase.GadgetBridgeUseCase
 import io.reactivex.schedulers.Schedulers
 
@@ -27,7 +27,7 @@ class ImportActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SleepChart.getAppComponent().plus(GadgetBridgeModule()).inject(this)
+        SleepChart.getAppComponent().plus(SleepModule()).inject(this)
         setContentView(R.layout.activity_import)
         setSupportActionBar(toolbar)
 
