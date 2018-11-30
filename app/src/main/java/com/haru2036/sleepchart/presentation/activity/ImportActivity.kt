@@ -36,7 +36,7 @@ class ImportActivity : AppCompatActivity() {
                     .observeOn(Schedulers.io())
                     .subscribeOn(Schedulers.io())
                     .subscribe({
-                        Snackbar.make(view, it.first().toString(), Snackbar.LENGTH_LONG)
+                        Snackbar.make(view, "sleeps imported", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show()
 
                     }, {

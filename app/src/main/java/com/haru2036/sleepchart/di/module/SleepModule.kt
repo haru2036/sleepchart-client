@@ -46,7 +46,7 @@ class SleepModule{
     fun provideGadgetBridgeRepository(gadgetBridgeDao: GadgetBridgeDao) = GadgetBridgeRepository(gadgetBridgeDao)
 
     @Provides
-    fun provideGadgetBridgeUseCase(gadgetBridgeRepository: GadgetBridgeRepository) = GadgetBridgeUseCase(gadgetBridgeRepository)
+    fun provideGadgetBridgeUseCase(gadgetBridgeRepository: GadgetBridgeRepository, sleepRepository: SleepRepository) = GadgetBridgeUseCase(gadgetBridgeRepository, sleepRepository)
 
 
 }

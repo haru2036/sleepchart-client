@@ -3,11 +3,13 @@ package com.haru2036.sleepchart.domain.usecase
 import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.infra.repository.GadgetBridgeRepository
 import com.haru2036.sleepchart.infra.repository.SleepRepository
+import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
 
-class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository: GadgetBridgeRepository) {
+class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository: GadgetBridgeRepository,
+                                              private val sleepRepository: SleepRepository) {
     fun syncActivity() = gadgetBridgeRepository.syncActivity().map {
         (1..(it.size - 1))
                 .map { index -> Pair(it[index - 1], it[index]) }
@@ -30,7 +32,7 @@ class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository
                         } ?: Pair(previous, sleeps)
                     }
                 }.second
-    }
+    }.flatMapObservable { Observable.fromIterable(it).concatMap { sleep -> sleepRepository.createSleep(sleep).toObservable() } }
 }
 
 data class SleepEvent(val time: Date, val kind: SleepEventType)
