@@ -1,5 +1,7 @@
 package com.haru2036.sleepchart.domain.usecase
 
+import android.util.Log
+import com.haru2036.sleepchart.domain.entity.GadgetBridgeActivitySample
 import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.infra.repository.GadgetBridgeRepository
 import com.haru2036.sleepchart.infra.repository.SleepRepository
@@ -10,14 +12,29 @@ import javax.inject.Inject
 
 class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository: GadgetBridgeRepository,
                                               private val sleepRepository: SleepRepository) {
-    fun syncActivity() = gadgetBridgeRepository.syncActivity().map {
-        (1..(it.size - 1))
-                .map { index -> Pair(it[index - 1], it[index]) }
+    //    private val sleepActivityStartType = listOf(112, 122, 121, 123, 26, 25, 80, 89, 90)
+    private val sleepActivityStartType = listOf(112, 122, 121, 123)
+
+    fun syncActivity() = gadgetBridgeRepository.syncActivity().map { list ->
+        val smoothedActivitySamples = (30..(list.size - 1)).step(30)
+                .map { list.slice(it - 29..it) }
+                .map { sublist: List<GadgetBridgeActivitySample> ->
+                    Log.d("sublist", sublist.toString())
+                    sublist.groupingBy { it.activityType }
+                            .eachCount()
+                            .maxBy { it.value }
+                            ?.let {
+                                return@let GadgetBridgeActivitySample(sublist.first().time, it.key)
+                            }
+                }.filterNotNull()
+
+        (1..(smoothedActivitySamples.size - 1))
+                .map { index -> Pair(smoothedActivitySamples[index - 1], smoothedActivitySamples[index]) }
                 .map { currentItems ->
-                    if (currentItems.first.activityType == 112 && currentItems.second.activityType != 112) {
-                        return@map SleepEvent(Date(currentItems.first.time), SleepEventType.START)
-                    } else if (currentItems.first.activityType != 112 && currentItems.second.activityType == 112) {
-                        return@map SleepEvent(Date(currentItems.second.time), SleepEventType.END)
+                    if (!sleepActivityStartType.contains(currentItems.first.activityType) && sleepActivityStartType.contains(currentItems.second.activityType)) {
+                        return@map SleepEvent(currentItems.first.time, SleepEventType.START)
+                    } else if (sleepActivityStartType.contains(currentItems.first.activityType) && !sleepActivityStartType.contains(currentItems.second.activityType)) {
+                        return@map SleepEvent(currentItems.second.time, SleepEventType.END)
                     } else {
                         return@map null
                     }

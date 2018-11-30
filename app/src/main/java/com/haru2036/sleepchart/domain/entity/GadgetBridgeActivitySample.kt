@@ -1,3 +1,5 @@
 package com.haru2036.sleepchart.domain.entity
 
-data class GadgetBridgeActivitySample(val time: Long, val activityType: Int)
+import java.util.*
+
+data class GadgetBridgeActivitySample(val time: Date, val activityType: Int)

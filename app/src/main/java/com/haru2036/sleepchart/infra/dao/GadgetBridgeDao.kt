@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.haru2036.sleepchart.domain.entity.GadgetBridgeActivitySample
 import io.reactivex.Single
+import java.util.*
 
 
 class GadgetBridgeDao() {
@@ -15,7 +16,7 @@ class GadgetBridgeDao() {
                 val cursor = it.query("MI_BAND_ACTIVITY_SAMPLE", arrayOf("TIMESTAMP", "RAW_KIND"), "", emptyArray(), "", "", "")
                 cursor.moveToFirst()
                 while (!cursor.isAfterLast) {
-                    activitySamples.add(GadgetBridgeActivitySample(cursor.getLong(0), cursor.getInt(1)))
+                    activitySamples.add(GadgetBridgeActivitySample(Date(cursor.getLong(0) * 1000), cursor.getInt(1)))
                     cursor.moveToNext()
                 }
                 cursor.close()
