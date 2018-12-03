@@ -9,7 +9,6 @@ import io.reactivex.Observable
 import java.util.*
 import javax.inject.Inject
 
-
 class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository: GadgetBridgeRepository,
                                               private val sleepRepository: SleepRepository) {
     //    private val sleepActivityStartType = listOf(112, 122, 121, 123, 26, 25, 80, 89, 90)
@@ -51,7 +50,8 @@ class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository
                 }.second
     }
 
-    fun syncActivity() = gadgetBridgeRepository.syncActivity()
+    fun syncActivity() = sleepRepository.findSleeps().last(Sleep(0, Date(0), Date(0)))
+            .flatMap { gadgetBridgeRepository.syncActivity(it.end) }
             .map { convertActivitySamplesToSleeps(it) }
             .flatMapObservable { Observable.fromIterable(it).concatMap { sleep -> sleepRepository.createSleep(sleep).toObservable() } }!!
 }
