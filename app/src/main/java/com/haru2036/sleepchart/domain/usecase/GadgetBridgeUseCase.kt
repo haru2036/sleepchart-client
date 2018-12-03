@@ -18,7 +18,6 @@ class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository
         val smoothedActivitySamples = (30..(samples.size - 1)).step(30)
                 .map { samples.slice(it - 29..it) }
                 .map { sublist: List<GadgetBridgeActivitySample> ->
-                    Log.d("sublist", sublist.toString())
                     sublist.groupingBy { it.activityType }
                             .eachCount()
                             .maxBy { it.value }
@@ -28,16 +27,15 @@ class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository
                 }.filterNotNull()
 
         return (1..(smoothedActivitySamples.size - 1))
-                .map { index -> Pair(smoothedActivitySamples[index - 1], smoothedActivitySamples[index]) }
-                .map { currentItems ->
+                .map { index -> Pair(smoothedActivitySamples[index - 1], smoothedActivitySamples[index]) }.mapNotNull { currentItems ->
                     if (!sleepActivityStartType.contains(currentItems.first.activityType) && sleepActivityStartType.contains(currentItems.second.activityType)) {
-                        return@map SleepEvent(currentItems.first.time, SleepEventType.START)
+                        SleepEvent(currentItems.first.time, SleepEventType.START)
                     } else if (sleepActivityStartType.contains(currentItems.first.activityType) && !sleepActivityStartType.contains(currentItems.second.activityType)) {
-                        return@map SleepEvent(currentItems.second.time, SleepEventType.END)
+                        SleepEvent(currentItems.second.time, SleepEventType.END)
                     } else {
-                        return@map null
+                        null
                     }
-                }.filterNotNull()
+                }
                 .fold(Pair(null as SleepEvent?, mutableListOf<Sleep>())) { (previous: SleepEvent?, sleeps: List<Sleep>), sleepEvent ->
                     //startとendのイベントをくっつけてSleepにする
                     when (sleepEvent.kind) {

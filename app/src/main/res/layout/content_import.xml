@@ -7,5 +7,9 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".presentation.activity.ImportActivity"
     tools:showIn="@layout/activity_import">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/message_import_description"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -2,6 +2,8 @@
     <string name="app_name">SleepChart</string>
     <string name="menu_export">エクスポート</string>
     <string name="menu_import">インポート</string>
+    <string name="message_import_imported">インポートしました</string>
+    <string name="message_import_description">GadgetBridgeからインポートするにはボタンを押してください</string>
     <string name="cancel">Cancel</string>
     <string name="choose_app">アプリを選択</string>
     <string name="good_night">おやすみなさい</string>

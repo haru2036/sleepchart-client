@@ -1,5 +1,6 @@
 package com.haru2036.sleepchart.presentation.activity
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +11,7 @@ import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.SleepModule
 import com.haru2036.sleepchart.domain.usecase.GadgetBridgeUseCase
+import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_import.*
@@ -32,12 +34,14 @@ class ImportActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         fab.setOnClickListener { view ->
-            gadgetBridgeUseCase.syncActivity()
+            RxPermissions(this).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .filter { it }
+                    .flatMap { gadgetBridgeUseCase.syncActivity() }
                     .observeOn(Schedulers.io())
                     .subscribeOn(Schedulers.io())
                     .subscribe({
-                        Snackbar.make(view, "sleeps imported", Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show()
+                        Snackbar.make(view, R.string.message_import_imported, Snackbar.LENGTH_LONG)
+                                .show()
 
                     }, {
                         Log.e("Failed to import GB DB", it.toString())
