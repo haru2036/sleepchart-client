@@ -15,9 +15,9 @@ class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository
     //    private val sleepActivityStartType = listOf(112, 122, 121, 123, 26, 25, 80, 89, 90)
     private val sleepActivityStartType = listOf(112, 122, 121, 123)
 
-    fun syncActivity() = gadgetBridgeRepository.syncActivity().map { list ->
-        val smoothedActivitySamples = (30..(list.size - 1)).step(30)
-                .map { list.slice(it - 29..it) }
+    private fun convertActivitySamplesToSleeps(samples: List<GadgetBridgeActivitySample>): MutableList<Sleep> {
+        val smoothedActivitySamples = (30..(samples.size - 1)).step(30)
+                .map { samples.slice(it - 29..it) }
                 .map { sublist: List<GadgetBridgeActivitySample> ->
                     Log.d("sublist", sublist.toString())
                     sublist.groupingBy { it.activityType }
@@ -28,7 +28,7 @@ class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository
                             }
                 }.filterNotNull()
 
-        (1..(smoothedActivitySamples.size - 1))
+        return (1..(smoothedActivitySamples.size - 1))
                 .map { index -> Pair(smoothedActivitySamples[index - 1], smoothedActivitySamples[index]) }
                 .map { currentItems ->
                     if (!sleepActivityStartType.contains(currentItems.first.activityType) && sleepActivityStartType.contains(currentItems.second.activityType)) {
@@ -49,7 +49,11 @@ class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository
                         } ?: Pair(previous, sleeps)
                     }
                 }.second
-    }.flatMapObservable { Observable.fromIterable(it).concatMap { sleep -> sleepRepository.createSleep(sleep).toObservable() } }
+    }
+
+    fun syncActivity() = gadgetBridgeRepository.syncActivity()
+            .map { convertActivitySamplesToSleeps(it) }
+            .flatMapObservable { Observable.fromIterable(it).concatMap { sleep -> sleepRepository.createSleep(sleep).toObservable() } }!!
 }
 
 data class SleepEvent(val time: Date, val kind: SleepEventType)
