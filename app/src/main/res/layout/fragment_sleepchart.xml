@@ -14,7 +14,6 @@
         android:layout_marginRight="16dp"
         app:layout_anchor="@id/fragment_sleepchart_recyclerview"
         app:layout_anchorGravity="bottom|right"/>
-        />
 
     <HorizontalScrollView
         android:layout_width="match_parent"
@@ -29,7 +28,7 @@
 
             <LinearLayout
                 android:layout_width="1920px"
-                android:layout_height="40dp"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <android.support.v7.widget.CardView
                     android:layout_width="0dp"
@@ -38,7 +37,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="20"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -48,7 +48,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="21"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -58,7 +59,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="22"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -68,7 +70,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="23"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -78,7 +81,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="0"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -88,7 +92,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="1"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -98,7 +103,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="2"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -108,7 +114,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="3"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -118,7 +125,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="4"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -128,7 +136,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="5"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -138,7 +147,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="6"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -148,7 +158,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="7"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -158,7 +169,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="8"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -168,7 +180,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="9"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -178,7 +191,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="10"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -188,7 +202,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="11"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -198,7 +213,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="12"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -208,7 +224,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="13"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -218,7 +235,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="14"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -228,7 +246,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="15"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -238,7 +257,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="16"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -248,7 +268,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="17"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -258,7 +279,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="18"/>
                 </android.support.v7.widget.CardView>
                 <android.support.v7.widget.CardView
@@ -268,7 +290,8 @@
                     <TextView
                         android:background="@drawable/background_timescale"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
                         android:text="19"/>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
