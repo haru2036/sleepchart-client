@@ -14,13 +14,13 @@ import java.util.*
 
 class SleepChartAdapter(val context: Context) : RecyclerView.Adapter<SleepChartAdapter.ViewHolder>() {
     private val inflater: LayoutInflater by lazy { LayoutInflater.from(context) }
-    private val nightOffset = 11L
+    private val nightOffset = 4L //前日の20~23時を当日扱いにするためのオフセット
     var items: List<Sleep> = emptyList()
     set(value){
         sleepsOfDays.clear()
         field = value
         value.forEach {
-            val day = DateTimeUtils.toInstant(it.start).atZone(ZoneId.systemDefault()).minusHours(nightOffset).dayOfYear
+            val day = DateTimeUtils.toInstant(it.start).atZone(ZoneId.systemDefault()).plusHours(nightOffset).dayOfYear
             if(!sleepsOfDays.containsKey(day)){
                 sleepsOfDays.put(day, mutableListOf(it))
             }else{
