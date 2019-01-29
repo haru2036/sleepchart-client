@@ -7,10 +7,10 @@ import java.util.*
 
 
 class GadgetBridgeDao() {
-    fun getActivitySamples(since: Date): Single<List<GadgetBridgeActivitySample>>{
+    fun getActivitySamples(since: Date, gadgetBridgePath: String): Single<List<GadgetBridgeActivitySample>>{
         return Single.create { it ->
             val activitySamples = mutableListOf<GadgetBridgeActivitySample>()
-            SQLiteDatabase.openDatabase("/storage/emulated/0/Android/data/nodomain.freeyourgadget.gadgetbridge/files/Gadgetbridge", null, SQLiteDatabase.OPEN_READONLY).use {
+            SQLiteDatabase.openDatabase(gadgetBridgePath, null, SQLiteDatabase.OPEN_READONLY).use {
                 val cursor = it.query("MI_BAND_ACTIVITY_SAMPLE", arrayOf("TIMESTAMP", "RAW_KIND"), "TIMESTAMP >= ?", arrayOf((since.time/1000).toString()),"", "", "")
                 cursor.moveToFirst()
                 while (!cursor.isAfterLast) {

@@ -45,6 +45,8 @@ class ImportActivity : AppCompatActivity() {
 
                     }, {
                         Log.e("Failed to import GB DB", it.toString())
+                        Snackbar.make(view, R.string.message_import_import_failed, Snackbar.LENGTH_LONG)
+                                .show()
                     })
         }
     }

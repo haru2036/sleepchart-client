@@ -1,16 +1,19 @@
 package com.haru2036.sleepchart.domain.usecase
 
-import android.util.Log
 import com.haru2036.sleepchart.domain.entity.GadgetBridgeActivitySample
 import com.haru2036.sleepchart.domain.entity.Sleep
+import com.haru2036.sleepchart.infra.SharedPreferencesAccessor
 import com.haru2036.sleepchart.infra.repository.GadgetBridgeRepository
 import com.haru2036.sleepchart.infra.repository.SleepRepository
 import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.functions.BiFunction
 import java.util.*
 import javax.inject.Inject
 
 class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository: GadgetBridgeRepository,
-                                              private val sleepRepository: SleepRepository) {
+                                              private val sleepRepository: SleepRepository,
+                                              private val sharedPreferencesAccessor: SharedPreferencesAccessor) {
     //    private val sleepActivityStartType = listOf(112, 122, 121, 123, 26, 25, 80, 89, 90)
     private val sleepActivityStartType = listOf(112, 122, 121, 123)
 
@@ -48,8 +51,8 @@ class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository
                 }.second
     }
 
-    fun syncActivity() = sleepRepository.findSleeps().last(Sleep(0, Date(0), Date(0)))
-            .flatMap { gadgetBridgeRepository.syncActivity(it.end) }
+    fun syncActivity() = Single.zip(sleepRepository.findSleeps().last(Sleep(0, Date(0), Date(0))), sharedPreferencesAccessor.getGadgetBridgePath(), BiFunction<Sleep, String, Pair<Sleep, String>> { sleep, path -> Pair(sleep, path) })
+            .flatMap { gadgetBridgeRepository.syncActivity(it.first.end, it.second) }
             .map { convertActivitySamplesToSleeps(it) }
             .flatMapObservable { Observable.fromIterable(it).concatMap { sleep -> sleepRepository.createSleep(sleep).toObservable() } }!!
 }

@@ -7,5 +7,5 @@ import javax.inject.Singleton
 
 @Singleton
 open class GadgetBridgeRepository @Inject constructor(private val gadgetBridgeDao: GadgetBridgeDao) {
-    fun syncActivity(since:Date) = gadgetBridgeDao.getActivitySamples(since)
+    fun syncActivity(since: Date, gadgetBridgePath: String) = gadgetBridgeDao.getActivitySamples(since, gadgetBridgePath)
 }
