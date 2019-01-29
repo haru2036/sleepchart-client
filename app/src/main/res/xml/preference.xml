@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/settings_category_import"
+        android:key="pref_key_storage_settings">
+        <EditTextPreference
+            android:key="pref_key_gadgetbridge_import_path"
+            android:defaultValue="/storage/emulated/0/Android/data/nodomain.freeyourgadget.gadgetbridge/files/Gadgetbridge"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="@string/settings_import_path" />
+    </PreferenceCategory>
+</PreferenceScreen>

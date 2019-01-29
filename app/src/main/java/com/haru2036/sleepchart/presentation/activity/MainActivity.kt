@@ -13,10 +13,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_wrapper)
         if(savedInstanceState == null){
             fragmentManager.beginTransaction()
-                    .add(R.id.activity_main_fragment_container, fragment)
+                    .add(R.id.activity_wrapper_fragment_container, fragment)
                     .commit()
         }
     }
@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         when(item?.itemId){
             R.id.menu_main_import -> ImportActivity.start(this)
             R.id.menu_main_export -> fragment.exportChart()
+            R.id.menu_main_setting -> SettingsActivity.start(this)
         }
         return super.onOptionsItemSelected(item)
     }

@@ -10,4 +10,7 @@
     <string name="good_morning">おはようございます</string>
     <string name="sleep_twice_saved">二度寝を記録しました</string>
     <string name="title_activity_import">ImportActivity</string>
+    <string name="title_activity_setting">設定</string>
+    <string name="settings_import_path">GadgetBridgeデータベースのインポート元</string>
+    <string name="settings_category_import">データのインポートについて</string>
 </resources>
