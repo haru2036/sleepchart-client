@@ -5,7 +5,7 @@
         android:key="pref_key_storage_settings">
         <EditTextPreference
             android:key="pref_key_gadgetbridge_import_path"
-            android:defaultValue="/storage/emulated/0/Android/data/nodomain.freeyourgadget.gadgetbridge/files/Gadgetbridge"
+            android:defaultValue="@string/settings_default_db_path"
             android:selectAllOnFocus="true"
             android:singleLine="true"
             android:title="@string/settings_import_path" />
