@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.haru2036.sleepchart.presentation.TimeChartView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="40dp"/>
+    android:layout_height="40dp">
+
+    <com.haru2036.sleepchart.presentation.TimeChartView
+        android:id="@+id/view_time_chart"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"
+            android:layout_marginLeft="320px" />
+    </RelativeLayout>
+</FrameLayout>
+
 
