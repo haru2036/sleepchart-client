@@ -7,7 +7,7 @@
     <color name="colorWakePrimaryDark">#b4004e</color>
     <color name="colorWakeAccent">#448aff</color>
     <color name="sleepColor">#8c99e2</color>
-    <color name="saturdayBackground">#e8f3ff</color>
-    <color name="sundayBackground">#ffebf7</color>
-    <color name="normalBackground">#ffffff</color>
+    <color name="saturdayBackground">#80E8F3FF</color>
+    <color name="sundayBackground">#80FFEBF7</color>
+    <color name="normalBackground">#80FFFFFF</color>
 </resources>

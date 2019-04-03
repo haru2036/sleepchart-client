@@ -54,7 +54,7 @@ class SleepChartAdapter(val context: Context) : RecyclerView.Adapter<SleepChartA
                     else -> R.color.normalBackground
                 }
             )
-            view.setBackgroundColor(backgroundColor)
+            timeChartView.setBackgroundColor(backgroundColor)
             view.invalidate()
         }
     }
