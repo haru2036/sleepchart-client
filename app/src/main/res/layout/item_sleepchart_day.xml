@@ -3,6 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="40dp">
 
+    <com.haru2036.sleepchart.presentation.TimeChartView
+        android:id="@+id/view_time_chart"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -12,7 +18,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -21,9 +27,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -32,9 +38,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -43,9 +49,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -54,9 +60,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -66,9 +72,9 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="left"
                     android:background="@color/colorAccent" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -77,9 +83,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -88,9 +94,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -99,9 +105,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -110,9 +116,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -121,9 +127,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -132,9 +138,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -143,9 +149,21 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/colorAccent"
+                    android:layout_gravity="left" />
+            </FrameLayout>
+
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -154,9 +172,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -165,9 +183,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -176,9 +194,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -187,9 +205,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -198,9 +216,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -209,9 +227,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -220,9 +238,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -231,9 +249,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -242,9 +260,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -253,9 +271,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
 
-            <android.support.v7.widget.CardView
+            <FrameLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
@@ -264,25 +282,9 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1">
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="left" />
-            </android.support.v7.widget.CardView>
+            </FrameLayout>
         </LinearLayout>
 
-        <com.haru2036.sleepchart.presentation.TimeChartView
-            android:id="@+id/view_time_chart"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="40dp" />
 
     </RelativeLayout>
 </FrameLayout>
