@@ -1,6 +1,7 @@
 package com.haru2036.sleepchart.presentation.activity
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -19,9 +20,7 @@ import javax.inject.Inject
 
 class ImportActivity : AppCompatActivity() {
     companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, ImportActivity::class.java))
-        }
+        fun createIntent(context: Context) = Intent(context, ImportActivity::class.java)
     }
 
     @Inject
@@ -42,6 +41,7 @@ class ImportActivity : AppCompatActivity() {
                     .subscribe({
                         Snackbar.make(view, R.string.message_import_imported, Snackbar.LENGTH_LONG)
                                 .show()
+                        setResult(Activity.RESULT_OK)
 
                     }, {
                         Log.e("Failed to import GB DB", it.toString())

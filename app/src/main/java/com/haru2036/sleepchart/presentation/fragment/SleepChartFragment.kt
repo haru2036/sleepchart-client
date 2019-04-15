@@ -22,6 +22,7 @@ import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.haru2036.sleepchart.R
+import com.haru2036.sleepchart.app.Constants
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.SleepModule
 import com.haru2036.sleepchart.domain.usecase.SleepUseCase
@@ -59,8 +60,8 @@ class SleepChartFragment : Fragment(){
         return inflater !!.inflate(R.layout.fragment_sleepchart, container, false)
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         fab.setOnClickListener { toggleSleep() }
 
         sleepUsecase.isSleeping()
@@ -69,9 +70,9 @@ class SleepChartFragment : Fragment(){
                 .subscribe ({
                     setStateColors(it)
                 },
-                {
-                        Timber.e(it)
-                }).addTo(disposables)
+                        {
+                            Timber.e(it)
+                        }).addTo(disposables)
 
         chartRecyclerView.layoutManager = LinearLayoutManager(context).apply {
             orientation = LinearLayoutManager.VERTICAL
@@ -88,6 +89,7 @@ class SleepChartFragment : Fragment(){
 
     }
 
+
     override fun onDestroy() {
         disposables.dispose()
         super.onDestroy()
@@ -101,6 +103,7 @@ class SleepChartFragment : Fragment(){
                     val adapter = chartRecyclerView.adapter as SleepChartAdapter
                     adapter.items = sleeps
                     adapter.notifyDataSetChanged()
+                    scrollToLast()
                 }.addTo(disposables)
     }
 
@@ -183,13 +186,22 @@ class SleepChartFragment : Fragment(){
 
     }
 
-    fun setStateColors(isSleeping: Boolean){
+    private fun scrollToLast() = chartRecyclerView.smoothScrollToPosition(chartRecyclerView.adapter.itemCount)
+
+    private fun setStateColors(isSleeping: Boolean) {
         if(isSleeping){
             fab.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.colorAccent))
             fab.setImageDrawable(activity.getDrawable(R.drawable.ic_wb_sunny_white_24dp))
         }else{
             fab.backgroundTintList = ColorStateList.valueOf(activity.getColor(R.color.colorWakeAccent))
             fab.setImageDrawable(activity.getDrawable(R.drawable.ic_local_hotel_white_24dp))
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            Constants.REQUEST_IMPORT -> showSleeps()
         }
     }
 
