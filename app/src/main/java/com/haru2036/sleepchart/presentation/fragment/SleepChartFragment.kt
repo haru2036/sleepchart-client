@@ -95,7 +95,7 @@ class SleepChartFragment : Fragment(){
         super.onDestroy()
     }
 
-    private fun showSleeps(){
+    fun showSleeps() {
         sleepUsecase.findSleeps().toList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -197,13 +197,5 @@ class SleepChartFragment : Fragment(){
             fab.setImageDrawable(activity.getDrawable(R.drawable.ic_local_hotel_white_24dp))
         }
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            Constants.REQUEST_IMPORT -> showSleeps()
-        }
-    }
-
 
 }
