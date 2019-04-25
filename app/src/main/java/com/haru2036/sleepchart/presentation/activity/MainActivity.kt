@@ -30,7 +30,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
-            R.id.menu_main_import -> startActivityForResult(ImportActivity.createIntent(this), Constants.REQUEST_IMPORT)
             R.id.menu_main_export -> fragment.exportChart()
             R.id.menu_main_setting -> SettingsActivity.start(this)
         }

@@ -21,10 +21,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".presentation.activity.ImportActivity"
-            android:label="@string/title_activity_import"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity
             android:name=".presentation.activity.SettingsActivity"
             android:label="@string/title_activity_setting"
             android:theme="@style/AppTheme" />

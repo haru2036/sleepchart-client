@@ -111,6 +111,8 @@ dependencies {
         transitive = true;
     }
 
+    implementation 'com.github.omadahealth:swipy:1.2.3@aar'
+
 
 }
 repositories {

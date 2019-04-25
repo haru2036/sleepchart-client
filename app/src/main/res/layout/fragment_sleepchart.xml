@@ -295,10 +295,19 @@
                         android:text="19"/>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
-            <android.support.v7.widget.RecyclerView
+
+            <com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout
                 android:layout_width="1920px"
                 android:layout_height="match_parent"
-                android:id="@+id/fragment_sleepchart_recyclerview"/>
+                android:id="@+id/fragment_sleepchart_swipe_refresh_layout"
+                app:srl_direction="bottom">
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="1920px"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fragment_sleepchart_recyclerview" />
+
+            </com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout>
         </LinearLayout>
 
 

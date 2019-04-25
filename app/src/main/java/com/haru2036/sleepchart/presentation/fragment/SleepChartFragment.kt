@@ -1,6 +1,7 @@
 package com.haru2036.sleepchart.presentation.fragment
 
 import android.Manifest
+import android.app.Activity
 import android.app.Fragment
 import android.content.Context
 import android.content.Intent
@@ -25,9 +26,11 @@ import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.app.Constants
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.SleepModule
+import com.haru2036.sleepchart.domain.usecase.GadgetBridgeUseCase
 import com.haru2036.sleepchart.domain.usecase.SleepUseCase
 import com.haru2036.sleepchart.extensions.addTo
 import com.haru2036.sleepchart.presentation.adapter.SleepChartAdapter
+import com.omadahealth.github.swipyrefreshlayout.library.SwipyRefreshLayout
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -43,11 +46,15 @@ class SleepChartFragment : Fragment(){
     private val chartRecyclerView: RecyclerView by lazy { view.findViewById<RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
     private val fab: FloatingActionButton by lazy { view.findViewById<FloatingActionButton>(R.id.fab) }
     private val chartView: LinearLayout by lazy { view.findViewById<LinearLayout>(R.id.fragment_sleepchart_main_container) }
+    private val swipyrefreshLayout: SwipyRefreshLayout by lazy { view.findViewById<SwipyRefreshLayout>(R.id.fragment_sleepchart_swipe_refresh_layout) }
 
     private val disposables: CompositeDisposable = CompositeDisposable()
 
     @Inject
     lateinit var sleepUsecase: SleepUseCase
+
+    @Inject
+    lateinit var gadgetBridgeUseCase: GadgetBridgeUseCase
 
     companion object {
         @JvmStatic
@@ -63,6 +70,26 @@ class SleepChartFragment : Fragment(){
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         fab.setOnClickListener { toggleSleep() }
+
+        swipyrefreshLayout.setOnRefreshListener {
+            RxPermissions(activity!!).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .filter { it }
+                    .flatMap { gadgetBridgeUseCase.syncActivity() }
+                    .observeOn(Schedulers.io())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({
+                        Snackbar.make(view, R.string.message_import_imported, Snackbar.LENGTH_LONG).show()
+                        showSleeps()
+                        swipyrefreshLayout.isRefreshing = false
+
+                    }, {
+                        Log.e("Failed to import GB DB", it.toString())
+                        Snackbar.make(view, R.string.message_import_import_failed, Snackbar.LENGTH_LONG)
+                                .show()
+                        swipyrefreshLayout.isRefreshing = false
+                    })
+
+        }
 
         sleepUsecase.isSleeping()
                 .observeOn(AndroidSchedulers.mainThread())
