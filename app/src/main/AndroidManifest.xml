@@ -22,7 +22,7 @@
         </activity>
         <activity
             android:name=".presentation.activity.SettingsActivity"
-            android:label="@string/title_activity_setting"
+            android:label="@string/title_menu_setting"
             android:theme="@style/AppTheme" />
     </application>
 

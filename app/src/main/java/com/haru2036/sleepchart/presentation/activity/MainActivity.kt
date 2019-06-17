@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId){
             R.id.menu_main_export -> fragment.exportChart()
+            R.id.menu_main_import -> fragment.importSleeps()
             R.id.menu_main_setting -> SettingsActivity.start(this)
         }
         return super.onOptionsItemSelected(item)
