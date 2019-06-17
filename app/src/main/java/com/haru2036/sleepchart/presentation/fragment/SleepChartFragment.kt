@@ -40,7 +40,6 @@ import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SleepChartFragment : Fragment(){
@@ -76,7 +75,6 @@ class SleepChartFragment : Fragment(){
             RxPermissions(activity!!).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     .filter { it }
                     .flatMap { gadgetBridgeUseCase.syncActivity() }
-                    .singleOrError()
                     .observeOn(Schedulers.io())
                     .subscribeOn(Schedulers.io())
                     .subscribe({
