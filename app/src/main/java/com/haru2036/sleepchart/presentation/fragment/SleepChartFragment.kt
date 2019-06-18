@@ -12,13 +12,13 @@ import android.os.Bundle
 import android.os.Environment
 import android.os.Vibrator
 import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.Snackbar
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.support.v7.widget.RecyclerView
-import android.support.design.widget.Snackbar
-import android.util.Log
 import android.widget.LinearLayout
 import android.widget.Toast
 import com.haru2036.sleepchart.R
@@ -134,11 +134,12 @@ class SleepChartFragment : Fragment(){
         RxPermissions(activity!!).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .filter { it }
                 .flatMap { gadgetBridgeUseCase.syncActivity() }
-                .singleOrError()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe({
+                .doOnComplete {
                     Snackbar.make(view, R.string.message_import_imported, Snackbar.LENGTH_LONG).show()
+                }
+                .subscribe({
                     showSleeps()
 
                 }, {
@@ -146,7 +147,7 @@ class SleepChartFragment : Fragment(){
                     Timber.e(it)
                     Snackbar.make(view, R.string.message_import_import_failed, Snackbar.LENGTH_LONG)
                             .show()
-                })
+                }).addTo(disposables)
 
     }
 
