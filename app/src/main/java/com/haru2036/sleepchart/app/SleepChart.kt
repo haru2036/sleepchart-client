@@ -11,6 +11,7 @@ import retrofit2.Retrofit
 import javax.inject.Inject
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
+import timber.log.Timber
 
 
 open class SleepChart : Application(){
@@ -40,7 +41,8 @@ open class SleepChart : Application(){
         initializeDagger()
         application = this
         AndroidThreeTen.init(this)
-        Stetho.initializeWithDefaults(this);
+        Timber.plant(Timber.DebugTree())
+        Stetho.initializeWithDefaults(this)
         Fabric.with(this, Crashlytics())
 
     }

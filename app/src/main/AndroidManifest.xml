@@ -24,6 +24,10 @@
             android:name=".presentation.activity.SettingsActivity"
             android:label="@string/title_menu_setting"
             android:theme="@style/AppTheme" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="${fabric_io_id}" />
     </application>
 
 </manifest>
