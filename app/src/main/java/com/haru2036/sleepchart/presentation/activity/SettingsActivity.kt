@@ -3,7 +3,7 @@ package com.haru2036.sleepchart.presentation.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.presentation.fragment.SettingsFragment
 
