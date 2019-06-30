@@ -29,6 +29,7 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
         val googleApiClient = GoogleApiClient.Builder(this)
@@ -45,10 +46,14 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        when(resultCode){
+        when(requestCode){
             RC_SIGN_IN -> {
                 val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-                statusText.text = result.toString()
+                statusText.text = if(result.isSuccess){
+                    result.signInAccount!!.idToken!!
+                }else{
+                    result.status.statusMessage
+                }
             }
 
         }
