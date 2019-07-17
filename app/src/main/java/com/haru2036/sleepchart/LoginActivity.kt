@@ -9,9 +9,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.GoogleApiClient
+import com.haru2036.sleepchart.app.SleepChart
+import com.haru2036.sleepchart.di.module.SleepModule
+import com.haru2036.sleepchart.infra.repository.SharedPreferencesRepository
+import com.haru2036.sleepchart.presentation.activity.MainActivity
+import javax.inject.Inject
 
 class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedListener {
     private val RC_SIGN_IN = 1
+
+    @Inject
+    lateinit var sharedPreferencesRepository: SharedPreferencesRepository
 
     private val signInButton by lazy {
         findViewById<SignInButton>(R.id.sign_in_button)
@@ -27,6 +35,7 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        SleepChart.getAppComponent().plus(SleepModule()).inject(this)
         setContentView(R.layout.activity_login)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -49,10 +58,11 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
         when(requestCode){
             RC_SIGN_IN -> {
                 val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-                statusText.text = if(result.isSuccess){
-                    result.signInAccount!!.idToken!!
+                if (result.isSuccess) {
+                    sharedPreferencesRepository.saveToken(result.signInAccount!!.idToken!!)
+                    MainActivity.start(this)
                 }else{
-                    result.status.statusMessage
+                    statusText.text = result.status.statusMessage
                 }
             }
 

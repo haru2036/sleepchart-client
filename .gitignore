@@ -10,3 +10,4 @@
 fabric.properties
 app/fabric.gradle
 *.keystore
+google-services.json
