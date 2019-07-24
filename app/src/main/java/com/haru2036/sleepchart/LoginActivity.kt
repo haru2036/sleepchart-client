@@ -2,6 +2,7 @@ package com.haru2036.sleepchart
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.auth.api.Auth
@@ -11,6 +12,7 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.GoogleApiClient
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.SleepModule
+import com.haru2036.sleepchart.infra.repository.AccountRepository
 import com.haru2036.sleepchart.infra.repository.SharedPreferencesRepository
 import com.haru2036.sleepchart.presentation.activity.MainActivity
 import javax.inject.Inject
@@ -20,6 +22,9 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
 
     @Inject
     lateinit var sharedPreferencesRepository: SharedPreferencesRepository
+
+    @Inject
+    lateinit var accountRepository: AccountRepository
 
     private val signInButton by lazy {
         findViewById<SignInButton>(R.id.sign_in_button)
@@ -35,7 +40,7 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SleepChart.getAppComponent().plus(SleepModule()).inject(this)
+        SleepChart.getAppComponent().inject(this)
         setContentView(R.layout.activity_login)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -60,6 +65,7 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
                 val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
                 if (result.isSuccess) {
                     sharedPreferencesRepository.saveToken(result.signInAccount!!.idToken!!)
+                    accountRepository.register()
                     MainActivity.start(this)
                 }else{
                     statusText.text = result.status.statusMessage

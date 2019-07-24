@@ -27,9 +27,6 @@ class SleepModule{
     fun provideSleepDao(ormaHandler: OrmaHandler) = SleepDao(ormaHandler)
 
     @Provides
-    fun provideSharedPreferenceAccessor(context: Context) = SharedPreferencesRepository(context)
-
-    @Provides
     fun provideSleepSessionDao(ormaHandler: OrmaHandler) = SleepSessionDao(ormaHandler)
 
     @Provides
