@@ -12,9 +12,14 @@ import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.GoogleApiClient
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.SleepModule
+import com.haru2036.sleepchart.domain.usecase.AccountUsecase
+import com.haru2036.sleepchart.domain.usecase.SleepUseCase
 import com.haru2036.sleepchart.infra.repository.AccountRepository
 import com.haru2036.sleepchart.infra.repository.SharedPreferencesRepository
 import com.haru2036.sleepchart.presentation.activity.MainActivity
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import timber.log.Timber
 import javax.inject.Inject
 
 class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedListener {
@@ -24,7 +29,10 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
     lateinit var sharedPreferencesRepository: SharedPreferencesRepository
 
     @Inject
-    lateinit var accountRepository: AccountRepository
+    lateinit var accountUsecase: AccountUsecase
+
+    @Inject
+    lateinit var sleepUseCase: SleepUseCase
 
     private val signInButton by lazy {
         findViewById<SignInButton>(R.id.sign_in_button)
@@ -40,7 +48,7 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        SleepChart.getAppComponent().inject(this)
+        SleepChart.getAppComponent().plus(SleepModule()).inject(this)
         setContentView(R.layout.activity_login)
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -54,7 +62,6 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
         signInButton.setOnClickListener {
             val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
             startActivityForResult(signInIntent, RC_SIGN_IN)
-
         }
     }
 
@@ -65,8 +72,16 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
                 val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
                 if (result.isSuccess) {
                     sharedPreferencesRepository.saveToken(result.signInAccount!!.idToken!!)
-                    accountRepository.register()
-                    MainActivity.start(this)
+                    Timber.tag("token").d(sharedPreferencesRepository.getToken())
+                    accountUsecase.register()
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({
+                                MainActivity.start(this)
+                                finish()
+                            }, {
+                                Timber.tag("sleepchart-error").e(it)
+                            })
                 }else{
                     statusText.text = result.status.statusMessage
                 }

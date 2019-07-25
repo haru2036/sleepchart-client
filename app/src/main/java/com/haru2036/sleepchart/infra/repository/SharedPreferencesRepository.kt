@@ -16,5 +16,7 @@ class SharedPreferencesRepository @Inject constructor(val context: Context) {
     fun saveToken(token: String) = secureSharedPreferences.edit()
             .apply { putString("accessToken", token) }
             .apply()
+
+    fun getToken() = secureSharedPreferences.getString("accessToken", "")
 }
 

@@ -22,8 +22,6 @@ import javax.inject.Singleton
 @Component(modules = arrayOf(AppModule::class))
 interface AppComponent{
 
-    fun inject(activity: LoginActivity)
-
     fun inject(service: AccountService)
 
     fun inject(useCase: AccountUsecase)

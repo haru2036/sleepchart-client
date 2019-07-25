@@ -14,6 +14,8 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
                                                private val sleepSessionDao: SleepSessionDao){
     open fun fetchSleeps() = client.sleeps()
 
+    fun putSleeps(sleeps: List<Sleep>) = client.putSleeps(sleeps)
+
     fun findSleeps() = sleepDao.sleeps()
 
     fun findSleepSession() = sleepSessionDao.sleepSessions()
