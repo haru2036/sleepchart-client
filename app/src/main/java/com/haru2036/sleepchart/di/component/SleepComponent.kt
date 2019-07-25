@@ -1,10 +1,10 @@
 package com.haru2036.sleepchart.di.component
 
+import com.haru2036.sleepchart.LoginActivity
 import com.haru2036.sleepchart.di.module.AppModule
 import com.haru2036.sleepchart.di.module.SleepModule
 import com.haru2036.sleepchart.domain.usecase.GadgetBridgeUseCase
 import com.haru2036.sleepchart.domain.usecase.SleepUseCase
-import com.haru2036.sleepchart.infra.SharedPreferencesAccessor
 import com.haru2036.sleepchart.infra.api.client.SleepClient
 import com.haru2036.sleepchart.infra.api.service.SleepService
 import com.haru2036.sleepchart.infra.dao.GadgetBridgeDao
@@ -21,9 +21,9 @@ import dagger.Subcomponent
 @Subcomponent(modules = arrayOf(SleepModule::class, AppModule::class))
 interface SleepComponent{
 
-    fun inject(service: SleepService)
+    fun inject(activity: LoginActivity)
 
-    fun inject(sharedPreferencesAccessor: SharedPreferencesAccessor)
+    fun inject(service: SleepService)
 
     fun inject(sleepUseCase: SleepUseCase)
 

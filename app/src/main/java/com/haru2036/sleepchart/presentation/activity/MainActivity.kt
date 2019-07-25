@@ -1,15 +1,22 @@
 package com.haru2036.sleepchart.presentation.activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.app.Constants
 import com.haru2036.sleepchart.presentation.fragment.SleepChartFragment
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        fun start(context: Context) {
+            context.startActivity(Intent(context, MainActivity::class.java))
+        }
+    }
 
     val fragment: SleepChartFragment by lazy { SleepChartFragment.newInstance() }
 

@@ -11,16 +11,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Vibrator
-import android.support.design.widget.FloatingActionButton
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.SleepModule
@@ -40,7 +39,7 @@ import java.util.*
 import javax.inject.Inject
 
 class SleepChartFragment : Fragment(){
-    private val chartRecyclerView: RecyclerView by lazy { view.findViewById<RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
+    private val chartRecyclerView: androidx.recyclerview.widget.RecyclerView by lazy { view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
     private val fab: FloatingActionButton by lazy { view.findViewById<FloatingActionButton>(R.id.fab) }
     private val chartView: LinearLayout by lazy { view.findViewById<LinearLayout>(R.id.fragment_sleepchart_main_container) }
 
@@ -78,7 +77,7 @@ class SleepChartFragment : Fragment(){
                             Timber.e(it)
                         }).addTo(disposables)
 
-        chartRecyclerView.layoutManager = LinearLayoutManager(context).apply {
+        chartRecyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context).apply {
             orientation = LinearLayoutManager.VERTICAL
         }
 
@@ -211,7 +210,7 @@ class SleepChartFragment : Fragment(){
 
     }
 
-    private fun scrollToLast() = chartRecyclerView.smoothScrollToPosition(chartRecyclerView.adapter.itemCount)
+    private fun scrollToLast() = chartRecyclerView.smoothScrollToPosition(chartRecyclerView.adapter!!.itemCount)
 
     private fun setStateColors(isSleeping: Boolean) {
         if(isSleeping){
