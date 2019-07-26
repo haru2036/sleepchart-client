@@ -20,7 +20,9 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
 
     fun findSleepSession() = sleepSessionDao.sleepSessions()
 
-    fun createSleep(sleep: Sleep) = sleepDao.create(sleep)
+    fun createSleeps(sleeps: List<Sleep>) =
+            client.putSleeps(sleeps).flatMap { sleepDao.create(sleeps) }
+
 
     fun deleteSleep(id: Long) = sleepDao.deleteById(id)
 

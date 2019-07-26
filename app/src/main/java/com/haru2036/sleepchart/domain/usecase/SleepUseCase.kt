@@ -2,7 +2,6 @@ package com.haru2036.sleepchart.domain.usecase
 
 import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.domain.entity.SleepSession
-import com.haru2036.sleepchart.infra.api.response.SleepResponse
 import com.haru2036.sleepchart.infra.repository.SleepRepository
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -36,18 +35,18 @@ class SleepUseCase @Inject constructor(private val repository: SleepRepository) 
                 repository.findSleepSession()
                         .observeOn(Schedulers.io())
                         .subscribeOn(Schedulers.io())
-                        .flatMapSingle { sleepSession ->
+                        .flatMap { sleepSession ->
                             repository.deleteSleepSession(sleepSession)
-                            repository.createSleep(Sleep(0, sleepSession.start, date))
+                            repository.createSleeps(listOf(Sleep(0, sleepSession.start, date)))
                         }.map { isSleeping }
             }
         }
     }
 
-    fun trackSleepTwice(): Single<Long> = repository.findSleeps()
+    fun trackSleepTwice(): Observable<Long> = repository.findSleeps()
                 .toList()
                 .map { it.last().end }
-                .flatMap { repository.createSleep(Sleep(0, it, Calendar.getInstance().time)) }
+            .flatMapObservable { repository.createSleeps(listOf(Sleep(0, it, Calendar.getInstance().time))) }
 
     fun deleteSleep(id: Long) = repository.deleteSleep(id)
 }
