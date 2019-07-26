@@ -72,7 +72,6 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
                 val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
                 if (result.isSuccess) {
                     sharedPreferencesRepository.saveToken(result.signInAccount!!.idToken!!)
-                    Timber.tag("token").d(sharedPreferencesRepository.getToken())
                     accountUsecase.register()
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
