@@ -54,7 +54,7 @@ class GadgetBridgeUseCase @Inject constructor(private val gadgetBridgeRepository
     fun syncActivity() = Single.zip(sleepRepository.findSleeps().last(Sleep(0, Date(0), Date(0))), sharedPreferencesRepository.getGadgetBridgePath(), BiFunction<Sleep, String, Pair<Sleep, String>> { sleep, path -> Pair(sleep, path) })
             .flatMap { gadgetBridgeRepository.syncActivity(it.first.end, it.second) }
             .map { convertActivitySamplesToSleeps(it) }
-            .flatMapObservable { Observable.fromIterable(it).concatMap { sleep -> sleepRepository.createSleep(sleep).toObservable() } }!!
+            .flatMapObservable { Observable.fromIterable(it).concatMap { sleep -> sleepRepository.createSleeps(listOf(sleep)) } }!!
 }
 
 data class SleepEvent(val time: Date, val kind: SleepEventType)

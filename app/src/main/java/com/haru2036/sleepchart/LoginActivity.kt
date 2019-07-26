@@ -43,7 +43,6 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
