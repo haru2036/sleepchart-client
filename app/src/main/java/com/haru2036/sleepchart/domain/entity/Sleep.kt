@@ -11,7 +11,7 @@ import java.util.*
 data class Sleep(
         @PrimaryKey(autoincrement = true) @Column
         var id: Long,
-        @Column @Setter("start") @Json(name = "csStart")
+        @Column(indexed = true) @Setter("start") @Json(name = "csStart")
         var start: Date,
         @Column @Setter("end") @Json(name = "csEnd")
         var end: Date
