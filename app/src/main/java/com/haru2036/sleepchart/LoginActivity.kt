@@ -2,8 +2,6 @@ package com.haru2036.sleepchart
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -14,7 +12,6 @@ import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.SleepModule
 import com.haru2036.sleepchart.domain.usecase.AccountUsecase
 import com.haru2036.sleepchart.domain.usecase.SleepUseCase
-import com.haru2036.sleepchart.infra.repository.AccountRepository
 import com.haru2036.sleepchart.infra.repository.SharedPreferencesRepository
 import com.haru2036.sleepchart.presentation.activity.MainActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -38,10 +35,6 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
         findViewById<SignInButton>(R.id.sign_in_button)
     }
 
-    private val statusText by lazy{
-        findViewById<TextView>(R.id.sign_in_status_text)
-    }
-
     override fun onConnectionFailed(p0: ConnectionResult) {
     }
 
@@ -57,7 +50,6 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
                 .enableAutoManage(this /* FragmentActivity */, this /* OnConnectionFailedListener */)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build()
-        statusText.text = "未認証"
         signInButton.setOnClickListener {
             val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
             startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -80,8 +72,6 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
                             }, {
                                 Timber.tag("sleepchart-error").e(it)
                             })
-                }else{
-                    statusText.text = result.status.statusMessage
                 }
             }
 
