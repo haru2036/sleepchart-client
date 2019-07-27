@@ -5,6 +5,7 @@ import com.haru2036.sleepchart.domain.entity.SleepSession
 import com.haru2036.sleepchart.infra.api.client.SleepClient
 import com.haru2036.sleepchart.infra.dao.SleepDao
 import com.haru2036.sleepchart.infra.dao.SleepSessionDao
+import io.reactivex.Single
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -12,7 +13,12 @@ import javax.inject.Singleton
 open class SleepRepository @Inject constructor(private val client: SleepClient,
                                                private val sleepDao: SleepDao,
                                                private val sleepSessionDao: SleepSessionDao){
-    open fun fetchSleeps() = client.sleeps()
+    open fun fetchSleeps() : Single<List<Sleep>>{
+        return client.sleeps()
+                .flatMap { createSleeps(it) }
+                .flatMap { findSleeps() }
+                .toList()
+    }
 
     fun putSleeps(sleeps: List<Sleep>) = client.putSleeps(sleeps)
 

@@ -4,7 +4,6 @@ import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.domain.entity.SleepSession
 import com.haru2036.sleepchart.infra.repository.SleepRepository
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
@@ -13,13 +12,9 @@ import javax.inject.Inject
  * Created by haru2036 on 2016/11/28.
  */
 class SleepUseCase @Inject constructor(private val repository: SleepRepository) {
-    fun syncSleepsWithServer(): Observable<List<Sleep>> {
-        return repository.findSleeps()
-                .toList()
-                .flatMapObservable { repository.putSleeps(it) }
-    }
-
     fun fetchSleeps() = repository.fetchSleeps()
+
+    fun createSleeps(sleeps: List<Sleep>) = repository.createSleeps(sleeps)
 
     fun findSleeps() = repository.findSleeps()
 
