@@ -12,7 +12,8 @@
     <string name="sleep_twice_saved">二度寝を記録しました</string>
     <string name="title_activity_import">ImportActivity</string>
     <string name="title_menu_setting">設定</string>
-    <string name="title_menu_import">インポート</string>
+    <string name="title_menu_import_gadgetbridge">Gadget Bridge からインポート</string>
+    <string name="title_menu_import_googlefit">Google Fit からインポート</string>
     <string name="settings_import_path">GadgetBridgeデータベースのインポート元</string>
     <string name="settings_category_import">データのインポートについて</string>
 

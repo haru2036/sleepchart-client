@@ -1,6 +1,7 @@
 package com.haru2036.sleepchart.presentation.fragment
 
 import android.Manifest
+import android.app.Activity
 import android.app.Fragment
 import android.content.Context
 import android.content.Intent
@@ -18,12 +19,16 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.data.DataType
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.SleepModule
 import com.haru2036.sleepchart.domain.usecase.GadgetBridgeUseCase
+import com.haru2036.sleepchart.domain.usecase.GoogleFitUseCase
 import com.haru2036.sleepchart.domain.usecase.SleepUseCase
 import com.haru2036.sleepchart.extensions.addTo
 import com.haru2036.sleepchart.presentation.adapter.SleepChartAdapter
@@ -44,12 +49,16 @@ class SleepChartFragment : Fragment(){
     private val chartView: LinearLayout by lazy { view.findViewById<LinearLayout>(R.id.fragment_sleepchart_main_container) }
 
     private val disposables: CompositeDisposable = CompositeDisposable()
+    private val GOOGLE_FIT_PERMISSION_REQUEST_CODE = 1
 
     @Inject
     lateinit var sleepUsecase: SleepUseCase
 
     @Inject
     lateinit var gadgetBridgeUseCase: GadgetBridgeUseCase
+
+    @Inject
+    lateinit var googleFitUseCase: GoogleFitUseCase
 
     companion object {
         @JvmStatic
@@ -128,7 +137,7 @@ class SleepChartFragment : Fragment(){
                 }).addTo(disposables)
     }
 
-    fun importSleeps() {
+    fun importSleepsFromGadgetBridge() {
 
         RxPermissions(activity!!).request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 .filter { it }
@@ -149,7 +158,40 @@ class SleepChartFragment : Fragment(){
                 }).addTo(disposables)
 
     }
+    fun importSleepsFromGoogleFit() {
+        val fitnessOptions = FitnessOptions.builder().apply {
+            addDataType(DataType.TYPE_ACTIVITY_SAMPLES, FitnessOptions.ACCESS_READ)
+            addDataType(DataType.TYPE_ACTIVITY_SEGMENT, FitnessOptions.ACCESS_READ)
+        }.build()
+        if(!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(activity), fitnessOptions)){
+            GoogleSignIn.requestPermissions(activity, GOOGLE_FIT_PERMISSION_REQUEST_CODE, GoogleSignIn.getLastSignedInAccount(activity), fitnessOptions)
+        }else{
+            RxPermissions(activity).request(Manifest.permission.ACCESS_FINE_LOCATION)
+                    .flatMap { googleFitUseCase.importSleeps(context) }
+                    .subscribe({
+                        showSleeps()
+            },{
+                Timber.tag("sleepchart-error").e(it)
+            }).addTo(disposables)
+        }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK){
+            when(requestCode){
+                GOOGLE_FIT_PERMISSION_REQUEST_CODE ->
+                    RxPermissions(activity).request(Manifest.permission.ACCESS_FINE_LOCATION)
+                            .flatMap { googleFitUseCase.importSleeps(context) }
+                            .subscribe({
+                                showSleeps()
+                            },{
+                                Timber.tag("sleepchart-error").e(it)
+                            })
+            }
+        }
+    }
     private fun trackSleepTwice() = sleepUsecase.trackSleepTwice()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
