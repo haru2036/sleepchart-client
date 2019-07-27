@@ -168,6 +168,8 @@ class SleepChartFragment : Fragment(){
         }else{
             RxPermissions(activity).request(Manifest.permission.ACCESS_FINE_LOCATION)
                     .flatMap { googleFitUseCase.importSleeps(context) }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
                     .subscribe({
                         showSleeps()
             },{
@@ -184,11 +186,13 @@ class SleepChartFragment : Fragment(){
                 GOOGLE_FIT_PERMISSION_REQUEST_CODE ->
                     RxPermissions(activity).request(Manifest.permission.ACCESS_FINE_LOCATION)
                             .flatMap { googleFitUseCase.importSleeps(context) }
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
                             .subscribe({
                                 showSleeps()
                             },{
                                 Timber.tag("sleepchart-error").e(it)
-                            })
+                            }).addTo(disposables)
             }
         }
     }
