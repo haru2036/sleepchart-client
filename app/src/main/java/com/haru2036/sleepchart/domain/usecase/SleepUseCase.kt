@@ -14,6 +14,8 @@ import javax.inject.Inject
 class SleepUseCase @Inject constructor(private val repository: SleepRepository) {
     fun fetchSleeps() = repository.fetchSleeps()
 
+    fun createSleeps(sleeps: List<Sleep>) = repository.createSleeps(sleeps)
+
     fun findSleeps() = repository.findSleeps()
 
     fun isSleeping() = repository.findSleepSession().isEmpty.map { !it }

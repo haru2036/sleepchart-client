@@ -20,7 +20,6 @@ class GoogleFitUseCase @Inject constructor(private val sleepRepository: SleepRep
                 .map { it.apply { add(0, Sleep(0, Calendar.getInstance().apply { add(Calendar.WEEK_OF_YEAR, -1) }.time, Calendar.getInstance().apply { add(Calendar.WEEK_OF_YEAR, -1) }.time)) } }
                 .map{ Pair(it.last().end, Calendar.getInstance().time)}
                 .flatMap { requestToGoogleFit(context, it) }
-                .flatMapObservable { sleepRepository.createSleeps(it) }
 
     private fun requestToGoogleFit(context: Context, range: Pair<Date, Date>): Single<List<Sleep>>{
         val readRequest = SessionReadRequest.Builder().apply {

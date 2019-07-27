@@ -167,7 +167,9 @@ class SleepChartFragment : Fragment(){
             GoogleSignIn.requestPermissions(activity, GOOGLE_FIT_PERMISSION_REQUEST_CODE, GoogleSignIn.getLastSignedInAccount(activity), fitnessOptions)
         }else{
             RxPermissions(activity).request(Manifest.permission.ACCESS_FINE_LOCATION)
-                    .flatMap { googleFitUseCase.importSleeps(context) }
+                    .flatMapSingle { googleFitUseCase.importSleeps(context) }
+                    .observeOn(Schedulers.io())
+                    .flatMap { sleepUsecase.createSleeps(it) }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
                     .subscribe({
@@ -185,7 +187,9 @@ class SleepChartFragment : Fragment(){
             when(requestCode){
                 GOOGLE_FIT_PERMISSION_REQUEST_CODE ->
                     RxPermissions(activity).request(Manifest.permission.ACCESS_FINE_LOCATION)
-                            .flatMap { googleFitUseCase.importSleeps(context) }
+                            .flatMapSingle { googleFitUseCase.importSleeps(context) }
+                            .observeOn(Schedulers.io())
+                            .flatMap { sleepUsecase.createSleeps(it) }
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({
