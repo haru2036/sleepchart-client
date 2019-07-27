@@ -17,6 +17,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -42,11 +43,13 @@ import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
+import kotlin.NoSuchElementException
 
 class SleepChartFragment : Fragment(){
     private val chartRecyclerView: androidx.recyclerview.widget.RecyclerView by lazy { view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
     private val fab: FloatingActionButton by lazy { view.findViewById<FloatingActionButton>(R.id.fab) }
     private val chartView: LinearLayout by lazy { view.findViewById<LinearLayout>(R.id.fragment_sleepchart_main_container) }
+    private val progressBar: ProgressBar by lazy { view.findViewById<ProgressBar>(R.id.fragment_sleepchart_progress)}
 
     private val disposables: CompositeDisposable = CompositeDisposable()
     private val GOOGLE_FIT_PERMISSION_REQUEST_CODE = 1
@@ -166,17 +169,7 @@ class SleepChartFragment : Fragment(){
         if(!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(activity), fitnessOptions)){
             GoogleSignIn.requestPermissions(activity, GOOGLE_FIT_PERMISSION_REQUEST_CODE, GoogleSignIn.getLastSignedInAccount(activity), fitnessOptions)
         }else{
-            RxPermissions(activity).request(Manifest.permission.ACCESS_FINE_LOCATION)
-                    .flatMapSingle { googleFitUseCase.importSleeps(context) }
-                    .observeOn(Schedulers.io())
-                    .flatMap { sleepUsecase.createSleeps(it) }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe({
-                        showSleeps()
-            },{
-                Timber.tag("sleepchart-error").e(it)
-            }).addTo(disposables)
+            requestSleepsFromGoogleFit()
         }
 
     }
@@ -185,21 +178,36 @@ class SleepChartFragment : Fragment(){
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode == Activity.RESULT_OK){
             when(requestCode){
-                GOOGLE_FIT_PERMISSION_REQUEST_CODE ->
-                    RxPermissions(activity).request(Manifest.permission.ACCESS_FINE_LOCATION)
-                            .flatMapSingle { googleFitUseCase.importSleeps(context) }
-                            .observeOn(Schedulers.io())
-                            .flatMap { sleepUsecase.createSleeps(it) }
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({
-                                showSleeps()
-                            },{
-                                Timber.tag("sleepchart-error").e(it)
-                            }).addTo(disposables)
+                GOOGLE_FIT_PERMISSION_REQUEST_CODE -> requestSleepsFromGoogleFit()
             }
         }
     }
+
+    private fun requestSleepsFromGoogleFit() {
+        progressBar.visibility = View.VISIBLE
+        RxPermissions(activity).request(Manifest.permission.ACCESS_FINE_LOCATION)
+                .flatMapSingle { googleFitUseCase.importSleeps(context) }
+                .observeOn(Schedulers.io())
+                .flatMap { sleepUsecase.createSleeps(it) }
+                .singleOrError()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    showSleeps()
+                    progressBar.visibility = View.GONE
+                    Snackbar.make(view, R.string.message_import_imported, Snackbar.LENGTH_LONG).show()
+                }, {
+                    Timber.tag("sleepchart-error").e(it)
+                    progressBar.visibility = View.GONE
+                    when (it::class.java) {
+                        NoSuchElementException::class.java ->
+                            Snackbar.make(view, R.string.message_import_import_no_new_sleeps, Snackbar.LENGTH_LONG).show()
+                        else ->
+                            Snackbar.make(view, R.string.message_import_import_failed, Snackbar.LENGTH_LONG).show()
+                    }
+                }).addTo(disposables)
+    }
+
     private fun trackSleepTwice() = sleepUsecase.trackSleepTwice()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
