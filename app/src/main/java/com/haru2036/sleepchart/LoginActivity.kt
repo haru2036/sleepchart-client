@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.SignInButton
@@ -11,7 +12,6 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.SleepModule
 import com.haru2036.sleepchart.domain.usecase.AccountUsecase
-import com.haru2036.sleepchart.domain.usecase.SleepUseCase
 import com.haru2036.sleepchart.infra.repository.SharedPreferencesRepository
 import com.haru2036.sleepchart.presentation.activity.MainActivity
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,9 +27,6 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
 
     @Inject
     lateinit var accountUsecase: AccountUsecase
-
-    @Inject
-    lateinit var sleepUseCase: SleepUseCase
 
     private val signInButton by lazy {
         findViewById<SignInButton>(R.id.sign_in_button)
@@ -53,6 +50,10 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
         signInButton.setOnClickListener {
             val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
             startActivityForResult(signInIntent, RC_SIGN_IN)
+        }
+        if(GoogleSignIn.getLastSignedInAccount(this)?.isExpired == false){
+            MainActivity.start(this)
+            finish()
         }
     }
 
