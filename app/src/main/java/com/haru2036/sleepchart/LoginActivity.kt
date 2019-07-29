@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.SignInButton
@@ -63,6 +64,10 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
         signInButton.setOnClickListener {
             val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
             startActivityForResult(signInIntent, RC_SIGN_IN)
+        }
+        if (GoogleSignIn.getLastSignedInAccount(this)?.isExpired == false) {
+            MainActivity.start(this)
+            finish()
         }
     }
 
