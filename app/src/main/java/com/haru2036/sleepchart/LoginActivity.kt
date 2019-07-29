@@ -1,5 +1,6 @@
 package com.haru2036.sleepchart
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
@@ -20,6 +21,15 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedListener {
+
+    companion object {
+        fun start(context: Context) {
+            context.startActivity(Intent(context, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            })
+        }
+    }
+
     private val RC_SIGN_IN = 1
 
     @Inject
