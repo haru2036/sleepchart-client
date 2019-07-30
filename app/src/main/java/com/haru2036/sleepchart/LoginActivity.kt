@@ -65,7 +65,14 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
             val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
-        if (GoogleSignIn.getLastSignedInAccount(this)?.isExpired == false) {
+        if (GoogleSignIn.getLastSignedInAccount(this)?.isExpired == true) {
+            Auth.GoogleSignInApi.silentSignIn(googleApiClient).setResultCallback {
+                if (it.isSuccess) {
+                    MainActivity.start(this)
+                    finish()
+                }
+            }
+        } else if (GoogleSignIn.getLastSignedInAccount(this)?.isExpired == false) {
             MainActivity.start(this)
             finish()
         }
