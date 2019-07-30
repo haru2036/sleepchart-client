@@ -3,6 +3,8 @@ package com.haru2036.sleepchart
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -46,6 +48,10 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
         findViewById<SignInButton>(R.id.sign_in_button)
     }
 
+    private val progressBar by lazy {
+        findViewById<ProgressBar>(R.id.progressBar)
+    }
+
     override fun onConnectionFailed(p0: ConnectionResult) {
     }
 
@@ -65,9 +71,18 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
             val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
-        if (GoogleSignIn.getLastSignedInAccount(this)?.isExpired == false) {
+        if (GoogleSignIn.getLastSignedInAccount(this)?.isExpired == true) {
+            Auth.GoogleSignInApi.silentSignIn(googleApiClient).setResultCallback {
+                if (it.isSuccess) {
+                    MainActivity.start(this)
+                    finish()
+                }
+            }
+        } else if (GoogleSignIn.getLastSignedInAccount(this)?.isExpired == false) {
             MainActivity.start(this)
             finish()
+        } else {
+            progressBar.visibility = View.INVISIBLE
         }
     }
 
