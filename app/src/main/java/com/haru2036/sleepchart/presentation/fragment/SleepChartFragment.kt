@@ -19,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.FitnessOptions
@@ -249,21 +250,28 @@ class SleepChartFragment : Fragment(){
                     }
 
                     val fileNameString = "sleep-" + SimpleDateFormat("yyyyMMdd-HHmmss", Locale.getDefault()).format(Date())
-                    val fileOutputStream = FileOutputStream(File(directory, fileNameString + ".jpg"))
+                    val exportFile = File(directory, fileNameString + ".jpg")
+                    val fileOutputStream = FileOutputStream(exportFile)
 
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 95, fileOutputStream)
                     fileOutputStream.close()
 
                     val intent = Intent(Intent.ACTION_SEND)
 
+                    val uri = FileProvider.getUriForFile(
+                            activity
+                            , activity.getApplicationContext().getPackageName() + ".provider"
+                            , exportFile)
+
                     intent.type = "image/jpeg"
-                    intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://$directory/$fileNameString.jpg"))
+                    intent.putExtra(Intent.EXTRA_STREAM, uri)
+                    intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                     val chooser = Intent.createChooser(intent, getString(R.string.choose_app))
                     if(intent.resolveActivity(activity.packageManager) != null){
                         startActivity(chooser)
                     }
-                    Toast.makeText(context, "Saved image to: file://$directory/$fileNameString.jpg", Toast.LENGTH_LONG).show()
-                    Log.d("saved image:" , "file://$directory/$fileNameString.jpg")
+                    Toast.makeText(context, "Saved image to:$uri", Toast.LENGTH_LONG).show()
+                    Log.d("saved image:", "uri")
                 }.addTo(disposables)
 
     }
