@@ -76,6 +76,8 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
                 if (it.isSuccess) {
                     MainActivity.start(this)
                     finish()
+                } else {
+                    progressBar.visibility = View.INVISIBLE
                 }
             }
         } else if (GoogleSignIn.getLastSignedInAccount(this)?.isExpired == false) {
