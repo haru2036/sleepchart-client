@@ -2,6 +2,9 @@ package com.haru2036.sleepchart.di.module
 
 import android.content.Context
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.haru2036.sleepchart.BuildConfig
+import com.haru2036.sleepchart.LoginActivity
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.OrmaHandler
 import dagger.Module
@@ -18,6 +21,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.Rfc3339DateJsonAdapter
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
+import timber.log.Timber
 import java.util.*
 
 
@@ -37,22 +41,32 @@ class AppModule(private val application: SleepChart){
                 .addInterceptor{ chain ->
                     val request = chain.request().newBuilder()
                     val maxAge = 60
-                    val token = SharedPreferencesRepository(context).getToken()
+                    val account = GoogleSignIn.getLastSignedInAccount(context)
+                    if (account?.isExpired != false) {
+                        LoginActivity.start(context)
+                    }
                     request.addHeader("cache-control", "public, max-age=" + maxAge)
-                    request.addHeader("Authorization", "Bearer $token")
+                    request.addHeader("Authorization", "Bearer ${account?.idToken}")
                     chain.proceed(request?.build())
                 }.addNetworkInterceptor(StethoInterceptor())
                 .build()
     }
 
     @Provides
-    fun provideRetrofit(okHttpClient: OkHttpClient) = Retrofit.Builder()
+    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        val url = if (BuildConfig.SERVER_PRODUCTION) {
+            "https://sleepchart.haru2036.com/api/"
+        } else {
+            "https://sleepchart-stage.haru2036.com/api/"
+        }
+        return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://sleepchart.haru2036.com/api/")
+                .baseUrl(url)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().add(Date::class.java, Rfc3339DateJsonAdapter()).build()))
             .build()
+    }
 
     @Provides
     fun provideOrmaDatabase(context: Context): OrmaHandler = OrmaHandler(context)

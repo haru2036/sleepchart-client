@@ -1,7 +1,10 @@
 package com.haru2036.sleepchart
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
 import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -20,6 +23,15 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedListener {
+
+    companion object {
+        fun start(context: Context) {
+            context.startActivity(Intent(context, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            })
+        }
+    }
+
     private val RC_SIGN_IN = 1
 
     @Inject
@@ -30,6 +42,10 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
 
     private val signInButton by lazy {
         findViewById<SignInButton>(R.id.sign_in_button)
+    }
+
+    private val progressBar by lazy {
+        findViewById<ProgressBar>(R.id.progressBar)
     }
 
     override fun onConnectionFailed(p0: ConnectionResult) {
@@ -51,9 +67,20 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
             val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
-        if(GoogleSignIn.getLastSignedInAccount(this)?.isExpired == false){
+        if (GoogleSignIn.getLastSignedInAccount(this)?.isExpired == true) {
+            Auth.GoogleSignInApi.silentSignIn(googleApiClient).setResultCallback {
+                if (it.isSuccess) {
+                    MainActivity.start(this)
+                    finish()
+                } else {
+                    progressBar.visibility = View.INVISIBLE
+                }
+            }
+        } else if (GoogleSignIn.getLastSignedInAccount(this)?.isExpired == false) {
             MainActivity.start(this)
             finish()
+        } else {
+            progressBar.visibility = View.INVISIBLE
         }
     }
 

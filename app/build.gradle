@@ -36,10 +36,12 @@ android {
     productFlavors {
         production {
             dimension "version"
+            buildConfigField "boolean", "SERVER_PRODUCTION", "true"
         }
         stage {
             dimension "version"
             applicationIdSuffix ".stage"
+            buildConfigField "boolean", "SERVER_PRODUCTION", "false"
         }
     }
 

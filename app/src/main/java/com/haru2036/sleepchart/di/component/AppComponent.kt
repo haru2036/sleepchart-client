@@ -1,6 +1,5 @@
 package com.haru2036.sleepchart.di.component
 
-import com.haru2036.sleepchart.LoginActivity
 import com.haru2036.sleepchart.app.SleepChart
 import com.haru2036.sleepchart.di.module.AppModule
 import com.haru2036.sleepchart.di.module.SleepModule
