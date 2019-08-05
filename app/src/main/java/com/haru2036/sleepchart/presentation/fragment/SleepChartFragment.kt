@@ -21,6 +21,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
@@ -35,6 +36,7 @@ import com.haru2036.sleepchart.domain.usecase.SleepUseCase
 import com.haru2036.sleepchart.extensions.addTo
 import com.haru2036.sleepchart.presentation.adapter.SleepChartAdapter
 import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

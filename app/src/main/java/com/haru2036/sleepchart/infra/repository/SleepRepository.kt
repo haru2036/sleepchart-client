@@ -6,6 +6,7 @@ import com.haru2036.sleepchart.infra.api.client.SleepClient
 import com.haru2036.sleepchart.infra.dao.SleepDao
 import com.haru2036.sleepchart.infra.dao.SleepSessionDao
 import io.reactivex.Single
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,9 +21,20 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
                 .toList()
     }
 
+    fun fetchSleepsWithRange(start: Date, end: Date): Single<List<Sleep>> {
+        return client.fetchSleepsWithRange(start, end)
+                .flatMap { createSleeps(it) }
+                .flatMap { sleepDao.findSleepsWithRange(start, end) }
+                .toList()
+    }
+
     fun putSleeps(sleeps: List<Sleep>) = client.putSleeps(sleeps)
 
     fun findSleeps() = sleepDao.sleeps()
+
+    fun findSleepsWithRange(start: Date, end: Date) = sleepDao.findSleepsWithRange(start, end)
+
+    fun getOldestSleep() = sleepDao.getOldestSleep()
 
     fun findSleepSession() = sleepSessionDao.sleepSessions()
 
