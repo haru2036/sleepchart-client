@@ -53,6 +53,10 @@ class SleepChartAdapter(val context: Context) : RecyclerView.Adapter<SleepChartA
         }
     }
 
+    open fun addOlderSleeps(sleeps: List<Sleep>) {
+        items = sleeps + items
+    }
+
     private var sleepsOfDays: MutableMap<Int, MutableList<Sleep>> = mutableMapOf()
 
     override fun getItemCount(): Int = sleepsOfDays.size

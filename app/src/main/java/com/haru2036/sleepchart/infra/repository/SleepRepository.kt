@@ -16,15 +16,15 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
                                                private val sleepSessionDao: SleepSessionDao){
     open fun fetchSleeps() : Single<List<Sleep>>{
         return client.sleeps()
-                .flatMap { createSleeps(it) }
+                .flatMap { sleepDao.create(it) }
                 .flatMap { findSleeps() }
                 .toList()
     }
 
-    fun fetchSleepsWithRange(start: Date, end: Date): Single<List<Sleep>> {
-        return client.fetchSleepsWithRange(start, end)
-                .flatMap { createSleeps(it) }
-                .flatMap { sleepDao.findSleepsWithRange(start, end) }
+    fun fetchSleepsWithRange(start: Date, count: Int): Single<List<Sleep>> {
+        return client.fetchSleepsWithRange(start, count)
+                .flatMap { sleepDao.create(it) }
+                .flatMap { sleepDao.findSleepsWithRange(start, count) }
                 .toList()
     }
 
@@ -32,7 +32,7 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
 
     fun findSleeps() = sleepDao.sleeps()
 
-    fun findSleepsWithRange(start: Date, end: Date) = sleepDao.findSleepsWithRange(start, end)
+    fun findSleepsWithRange(start: Date, count: Int) = sleepDao.findSleepsWithRange(start, count)
 
     fun getOldestSleep() = sleepDao.getOldestSleep()
 

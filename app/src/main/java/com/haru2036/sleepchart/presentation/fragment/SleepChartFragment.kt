@@ -103,8 +103,25 @@ class SleepChartFragment : Fragment(){
         }
 
         chartRecyclerView.adapter = SleepChartAdapter(context)
+        if (activity.intent.getBooleanExtra("NEEDS_RESTORE", false)) {
+            restoreLatestSleeps()
+        }
         showSleeps()
 
+    }
+
+    private fun restoreLatestSleeps() {
+        sleepUsecase.restoreLatestSleeps()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        {
+                            showSleeps()
+                        },
+                        {
+                            Timber.tag("sleepchart-error").e(it)
+                        }
+                ).addTo(disposables)
     }
 
 
@@ -123,6 +140,33 @@ class SleepChartFragment : Fragment(){
                     adapter.notifyDataSetChanged()
                     scrollToLast()
                 }.addTo(disposables)
+        chartRecyclerView.clearOnScrollListeners()
+        chartRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            var loading = false
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val linearLayoutManager = recyclerView
+                        .layoutManager as LinearLayoutManager?
+                if (!loading && 2 >= linearLayoutManager!!.findFirstVisibleItemPosition()) {
+                    loading = true
+                    progressBar.visibility = View.VISIBLE
+                    sleepUsecase.fetchOlderSleeps()
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({
+                                val adapter = chartRecyclerView.adapter as SleepChartAdapter
+                                adapter.addOlderSleeps(it)
+                                adapter.notifyDataSetChanged()
+                                loading = false
+                                progressBar.visibility = View.GONE
+                            }, { Timber.e(it) }).addTo(disposables)
+                }
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+        })
     }
 
     private fun toggleSleep(){

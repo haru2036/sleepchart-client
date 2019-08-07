@@ -16,6 +16,12 @@ class MainActivity : AppCompatActivity() {
         fun start(context: Context) {
             context.startActivity(Intent(context, MainActivity::class.java))
         }
+
+        fun startAndRestore(context: Context) {
+            context.startActivity(Intent(context, MainActivity::class.java).apply {
+                putExtra("NEEDS_RESTORE", true)
+            })
+        }
     }
 
     val fragment: SleepChartFragment by lazy { SleepChartFragment.newInstance() }

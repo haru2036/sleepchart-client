@@ -16,9 +16,9 @@ interface SleepService {
     @GET("sleeps")
     fun sleeps(): Observable<List<SleepResponse>>
 
-    @GET("sleeps")
-    fun fetchSleepsWithRange(@Query("start") start: Date,
-                             @Query("end") end: Date): Observable<List<SleepResponse>>
+    @GET("sleeps/range")
+    fun fetchSleepsWithRange(@Query("start") start: String,
+                             @Query("count") count: Int): Observable<List<SleepResponse>>
 
     @POST("sleeps")
     fun postSleeps(@Body sleeps: List<Sleep>): Observable<List<SleepResponse>>
