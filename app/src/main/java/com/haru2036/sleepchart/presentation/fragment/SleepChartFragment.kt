@@ -40,9 +40,11 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_sleepchart.*
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
+import java.lang.IndexOutOfBoundsException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -56,6 +58,7 @@ class SleepChartFragment : Fragment(){
 
     private val disposables: CompositeDisposable = CompositeDisposable()
     private val GOOGLE_FIT_PERMISSION_REQUEST_CODE = 1
+    private var loading = false
 
     @Inject
     lateinit var sleepUsecase: SleepUseCase
@@ -140,33 +143,24 @@ class SleepChartFragment : Fragment(){
                     adapter.notifyDataSetChanged()
                     scrollToLast()
                 }.addTo(disposables)
-        chartRecyclerView.clearOnScrollListeners()
-        chartRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            var loading = false
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val linearLayoutManager = recyclerView
-                        .layoutManager as LinearLayoutManager?
-                if (!loading && 2 >= linearLayoutManager!!.findFirstVisibleItemPosition()) {
-                    loading = true
-                    progressBar.visibility = View.VISIBLE
-                    sleepUsecase.fetchOlderSleeps()
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe({
-                                val adapter = chartRecyclerView.adapter as SleepChartAdapter
-                                adapter.addOlderSleeps(it)
-                                adapter.notifyDataSetChanged()
-                                loading = false
-                                progressBar.visibility = View.GONE
-                            }, { Timber.e(it) }).addTo(disposables)
-                }
-            }
 
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-            }
-        })
+        fragment_sleepchart_swipe_to_refresh.setOnRefreshListener {
+            fragment_sleepchart_swipe_to_refresh.isRefreshing = true
+            sleepUsecase.fetchOlderSleeps()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        val adapter = chartRecyclerView.adapter as SleepChartAdapter
+                        adapter.addOlderSleeps(it)
+                        adapter.notifyItemRangeInserted(0, adapter.sleepsToRowsCount(it))
+                        chartRecyclerView.scrollToPosition(adapter.sleepsToRowsCount(it))
+
+                        fragment_sleepchart_swipe_to_refresh.isRefreshing = false
+
+                    }, { Timber.e(it) }).addTo(disposables)
+
+
+        }
     }
 
     private fun toggleSleep(){

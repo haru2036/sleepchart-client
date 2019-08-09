@@ -22,10 +22,13 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
     }
 
     fun fetchSleepsWithRange(start: Date, count: Int): Single<List<Sleep>> {
+        var result: List<Sleep> = listOf()
         return client.fetchSleepsWithRange(start, count)
-                .flatMap { sleepDao.create(it) }
-                .flatMap { sleepDao.findSleepsWithRange(start, count) }
-                .toList()
+                .flatMap {
+                    result = it
+                    sleepDao.create(it)
+                }.map { result.sortedBy { it.start } }
+                .firstOrError()
     }
 
     fun putSleeps(sleeps: List<Sleep>) = client.putSleeps(sleeps)
