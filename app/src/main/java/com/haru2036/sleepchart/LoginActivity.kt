@@ -90,12 +90,11 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
             RC_SIGN_IN -> {
                 val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
                 if (result.isSuccess) {
-                    sharedPreferencesRepository.saveToken(result.signInAccount!!.idToken!!)
                     accountUsecase.register()
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribeOn(Schedulers.io())
                             .subscribe({
-                                MainActivity.start(this)
+                                MainActivity.startAndRestore(this)
                                 finish()
                             }, {
                                 Timber.tag("sleepchart-error").e(it)

@@ -2,8 +2,10 @@ package com.haru2036.sleepchart.domain.usecase
 
 import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.domain.entity.SleepSession
+import com.haru2036.sleepchart.infra.repository.PagingRepository
 import com.haru2036.sleepchart.infra.repository.SleepRepository
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import java.util.*
 import javax.inject.Inject
@@ -11,8 +13,20 @@ import javax.inject.Inject
 /**
  * Created by haru2036 on 2016/11/28.
  */
-class SleepUseCase @Inject constructor(private val repository: SleepRepository) {
+class SleepUseCase @Inject constructor(private val repository: SleepRepository,
+                                       private val pagingRepository: PagingRepository) {
     fun fetchSleeps() = repository.fetchSleeps()
+
+    fun fetchOlderSleeps(): Single<List<Sleep>> {
+        return repository.getOldestSleep()
+                .flatMap {
+                    repository.fetchSleepsWithRange(it.start, 20)
+                }
+    }
+
+    fun restoreLatestSleeps(): Single<List<Sleep>> {
+        return repository.fetchSleepsWithRange(Calendar.getInstance().time, 40)
+    }
 
     fun createSleeps(sleeps: List<Sleep>) = repository.createSleeps(sleeps)
 

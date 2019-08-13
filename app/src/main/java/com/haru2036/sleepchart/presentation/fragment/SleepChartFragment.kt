@@ -21,6 +21,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
@@ -35,12 +36,15 @@ import com.haru2036.sleepchart.domain.usecase.SleepUseCase
 import com.haru2036.sleepchart.extensions.addTo
 import com.haru2036.sleepchart.presentation.adapter.SleepChartAdapter
 import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_sleepchart.*
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
+import java.lang.IndexOutOfBoundsException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -54,6 +58,7 @@ class SleepChartFragment : Fragment(){
 
     private val disposables: CompositeDisposable = CompositeDisposable()
     private val GOOGLE_FIT_PERMISSION_REQUEST_CODE = 1
+    private var loading = false
 
     @Inject
     lateinit var sleepUsecase: SleepUseCase
@@ -101,8 +106,25 @@ class SleepChartFragment : Fragment(){
         }
 
         chartRecyclerView.adapter = SleepChartAdapter(context)
+        if (activity.intent.getBooleanExtra("NEEDS_RESTORE", false)) {
+            restoreLatestSleeps()
+        }
         showSleeps()
 
+    }
+
+    private fun restoreLatestSleeps() {
+        sleepUsecase.restoreLatestSleeps()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        {
+                            showSleeps()
+                        },
+                        {
+                            Timber.tag("sleepchart-error").e(it)
+                        }
+                ).addTo(disposables)
     }
 
 
@@ -121,6 +143,24 @@ class SleepChartFragment : Fragment(){
                     adapter.notifyDataSetChanged()
                     scrollToLast()
                 }.addTo(disposables)
+
+        fragment_sleepchart_swipe_to_refresh.setOnRefreshListener {
+            fragment_sleepchart_swipe_to_refresh.isRefreshing = true
+            sleepUsecase.fetchOlderSleeps()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        val adapter = chartRecyclerView.adapter as SleepChartAdapter
+                        adapter.addOlderSleeps(it)
+                        adapter.notifyItemRangeInserted(0, adapter.sleepsToRowsCount(it))
+                        chartRecyclerView.scrollToPosition(adapter.sleepsToRowsCount(it))
+
+                        fragment_sleepchart_swipe_to_refresh.isRefreshing = false
+
+                    }, { Timber.e(it) }).addTo(disposables)
+
+
+        }
     }
 
     private fun toggleSleep(){

@@ -41,16 +41,30 @@ class SleepChartAdapter(val context: Context) : RecyclerView.Adapter<SleepChartA
     set(value){
         sleepsOfDays.clear()
         field = value
-        value.forEach {
+        sleepsOfDays = aggregateSleepOfDays(value)
+    }
+
+    //日毎にまとめる
+    private fun aggregateSleepOfDays(sleeps: List<Sleep>): MutableMap<Int, MutableList<Sleep>> {
+        val sleepsPerDays = mutableMapOf<Int, MutableList<Sleep>>()
+        sleeps.forEach {
             val day = DateTimeUtils.toInstant(it.start).atZone(ZoneId.systemDefault()).plusHours(nightOffset).dayOfYear
-            if(!sleepsOfDays.containsKey(day)){
-                sleepsOfDays.put(day, mutableListOf(it))
-            }else{
-                val sleeps = sleepsOfDays.get(day)
-                sleeps !!.add(it)
-                sleepsOfDays.put(day, sleeps)
+            if (!sleepsPerDays.containsKey(day)) {
+                sleepsPerDays[day] = mutableListOf(it)
+            } else {
+                val sleeps = sleepsPerDays.get(day)
+                sleeps!!.add(it)
+                sleepsPerDays[day] = sleeps
             }
+
         }
+        return sleepsPerDays
+    }
+
+    fun sleepsToRowsCount(sleeps: List<Sleep>) = aggregateSleepOfDays(sleeps).size
+
+    open fun addOlderSleeps(sleeps: List<Sleep>) {
+        items = sleeps + items
     }
 
     private var sleepsOfDays: MutableMap<Int, MutableList<Sleep>> = mutableMapOf()
