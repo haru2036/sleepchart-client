@@ -2,16 +2,17 @@ package com.haru2036.sleepchart.app
 
 import android.app.Application
 import android.content.Context
+import com.crashlytics.android.Crashlytics
 import com.facebook.stetho.Stetho
+import com.haru2036.sleepchart.BuildConfig
 import com.haru2036.sleepchart.di.component.AppComponent
 import com.haru2036.sleepchart.di.component.DaggerAppComponent
 import com.haru2036.sleepchart.di.module.AppModule
 import com.jakewharton.threetenabp.AndroidThreeTen
+import io.fabric.sdk.android.Fabric
 import retrofit2.Retrofit
-import javax.inject.Inject
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
 import timber.log.Timber
+import javax.inject.Inject
 
 
 open class SleepChart : Application(){
@@ -42,9 +43,11 @@ open class SleepChart : Application(){
         application = this
         AndroidThreeTen.init(this)
         Timber.plant(Timber.DebugTree())
-        Stetho.initializeWithDefaults(this)
         Fabric.with(this, Crashlytics())
 
+        if(BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this)
+        }
     }
 
     fun initializeDagger(){
