@@ -10,7 +10,6 @@ import com.haru2036.sleepchart.infra.dao.GadgetBridgeDao
 import com.haru2036.sleepchart.infra.dao.SleepDao
 import com.haru2036.sleepchart.infra.dao.SleepSessionDao
 import com.haru2036.sleepchart.infra.repository.GadgetBridgeRepository
-import com.haru2036.sleepchart.infra.repository.PagingRepository
 import com.haru2036.sleepchart.infra.repository.SharedPreferencesRepository
 import com.haru2036.sleepchart.infra.repository.SleepRepository
 import dagger.Module
@@ -31,7 +30,7 @@ class SleepModule{
     fun provideSleepSessionDao(ormaHandler: OrmaHandler) = SleepSessionDao(ormaHandler)
 
     @Provides
-    fun provideSleepUseCase(sleepRepository: SleepRepository, pagingRepository: PagingRepository) = SleepUseCase(sleepRepository, pagingRepository)
+    fun provideSleepUseCase(sleepRepository: SleepRepository) = SleepUseCase(sleepRepository)
 
     @Provides
     fun provideSleepRepository(sleepClient: SleepClient, sleepDao: SleepDao, sleepSessionDao: SleepSessionDao) = SleepRepository(sleepClient, sleepDao, sleepSessionDao)

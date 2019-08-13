@@ -64,10 +64,12 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build()
         signInButton.setOnClickListener {
+            progressBar.visibility = View.VISIBLE
             val signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient)
             startActivityForResult(signInIntent, RC_SIGN_IN)
         }
         if (GoogleSignIn.getLastSignedInAccount(this)?.isExpired == true) {
+            progressBar.visibility = View.VISIBLE
             Auth.GoogleSignInApi.silentSignIn(googleApiClient).setResultCallback {
                 if (it.isSuccess) {
                     MainActivity.start(this)
@@ -79,8 +81,6 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
         } else if (GoogleSignIn.getLastSignedInAccount(this)?.isExpired == false) {
             MainActivity.start(this)
             finish()
-        } else {
-            progressBar.visibility = View.INVISIBLE
         }
     }
 
@@ -88,6 +88,7 @@ class LoginActivity : FragmentActivity(), GoogleApiClient.OnConnectionFailedList
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
             RC_SIGN_IN -> {
+                progressBar.visibility = View.INVISIBLE
                 val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
                 if (result.isSuccess) {
                     accountUsecase.register()

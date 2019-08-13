@@ -2,7 +2,6 @@ package com.haru2036.sleepchart.domain.usecase
 
 import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.domain.entity.SleepSession
-import com.haru2036.sleepchart.infra.repository.PagingRepository
 import com.haru2036.sleepchart.infra.repository.SleepRepository
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -13,9 +12,7 @@ import javax.inject.Inject
 /**
  * Created by haru2036 on 2016/11/28.
  */
-class SleepUseCase @Inject constructor(private val repository: SleepRepository,
-                                       private val pagingRepository: PagingRepository) {
-    fun fetchSleeps() = repository.fetchSleeps()
+class SleepUseCase @Inject constructor(private val repository: SleepRepository) {
 
     fun fetchOlderSleeps(): Single<List<Sleep>> {
         return repository.getOldestSleep()
