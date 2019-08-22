@@ -2,7 +2,8 @@ package com.haru2036.sleepchart.infra.dao
 
 import com.haru2036.sleepchart.di.OrmaHandler
 import com.haru2036.sleepchart.domain.entity.Sleep
-import io.reactivex.Single
+import io.reactivex.Observable
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -12,8 +13,12 @@ import javax.inject.Inject
 class SleepDao @Inject constructor(private val orma: OrmaHandler){
     fun deleteById(id: Long) = orma.db.deleteFromSleep().idEq(id).executeAsSingle()
 
-    fun create(sleep: Sleep): Single<Long> = orma.db.prepareInsertIntoSleepAsSingle().map { it.execute(sleep) }
+    fun create(sleeps: List<Sleep>): Observable<Long> = orma.db.prepareInsertIntoSleepAsSingle().flatMapObservable { it.executeAllAsObservable(sleeps) }
 
-    fun sleeps() = orma.db.selectFromSleep().executeAsObservable()
+    fun sleeps() = orma.db.selectFromSleep().orderByStartAsc().executeAsObservable()
+
+    fun findSleepsWithRange(start: Date, count: Int) = orma.db.selectFromSleep().where("start < ?", start).orderByStartAsc().limit(count.toLong()).executeAsObservable()
+
+    fun getOldestSleep() = orma.db.selectFromSleep().orderByStartAsc().executeAsObservable().firstOrError()
 
 }

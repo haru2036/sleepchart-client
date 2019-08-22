@@ -13,7 +13,19 @@ import javax.inject.Inject
  * Created by haru2036 on 2016/11/28.
  */
 class SleepUseCase @Inject constructor(private val repository: SleepRepository) {
-    fun fetchSleeps() = repository.fetchSleeps()
+
+    fun fetchOlderSleeps(): Single<List<Sleep>> {
+        return repository.getOldestSleep()
+                .flatMap {
+                    repository.fetchSleepsWithRange(it.start, 20)
+                }
+    }
+
+    fun restoreLatestSleeps(): Single<List<Sleep>> {
+        return repository.fetchSleepsWithRange(Calendar.getInstance().time, 40)
+    }
+
+    fun createSleeps(sleeps: List<Sleep>) = repository.createSleeps(sleeps)
 
     fun findSleeps() = repository.findSleeps()
 
@@ -29,18 +41,18 @@ class SleepUseCase @Inject constructor(private val repository: SleepRepository) 
                 repository.findSleepSession()
                         .observeOn(Schedulers.io())
                         .subscribeOn(Schedulers.io())
-                        .flatMapSingle { sleepSession ->
+                        .flatMap { sleepSession ->
                             repository.deleteSleepSession(sleepSession)
-                            repository.createSleep(Sleep(0, sleepSession.start, date))
+                            repository.createSleeps(listOf(Sleep(0, sleepSession.start, date)))
                         }.map { isSleeping }
             }
         }
     }
 
-    fun trackSleepTwice(): Single<Long> = repository.findSleeps()
+    fun trackSleepTwice(): Observable<Long> = repository.findSleeps()
                 .toList()
                 .map { it.last().end }
-                .flatMap { repository.createSleep(Sleep(0, it, Calendar.getInstance().time)) }
+            .flatMapObservable { repository.createSleeps(listOf(Sleep(0, it, Calendar.getInstance().time))) }
 
     fun deleteSleep(id: Long) = repository.deleteSleep(id)
 }

@@ -4,15 +4,14 @@ import com.github.gfx.android.orma.annotation.Column
 import com.github.gfx.android.orma.annotation.PrimaryKey
 import com.github.gfx.android.orma.annotation.Setter
 import com.github.gfx.android.orma.annotation.Table
-import com.squareup.moshi.Json
 import java.util.*
 
 @Table
-data class Sleep(
+data class UnfetchedItemRange(
         @PrimaryKey(autoincrement = true) @Column
         var id: Long,
-        @Column(indexed = true) @Setter("start") @Json(name = "csStart")
+        @Column(indexed = true) @Setter("start")
         var start: Date,
-        @Column @Setter("end") @Json(name = "csEnd")
+        @Column @Setter("end")
         var end: Date
 )
