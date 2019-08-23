@@ -63,8 +63,12 @@ class SleepChartAdapter(val context: Context) : RecyclerView.Adapter<SleepChartA
 
     fun sleepsToRowsCount(sleeps: List<Sleep>) = aggregateSleepOfDays(sleeps).size
 
-    open fun addOlderSleeps(sleeps: List<Sleep>) {
+    fun addOlderSleeps(sleeps: List<Sleep>) {
         items = sleeps + items
+    }
+
+    fun addNewerSleeps(sleeps: List<Sleep>) {
+        items = items + sleeps
     }
 
     private var sleepsOfDays: MutableMap<Int, MutableList<Sleep>> = mutableMapOf()

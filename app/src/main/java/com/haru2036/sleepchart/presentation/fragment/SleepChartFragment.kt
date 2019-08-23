@@ -20,7 +20,6 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
@@ -224,13 +223,14 @@ class SleepChartFragment : Fragment(){
         progressBar.visibility = View.VISIBLE
         RxPermissions(activity).request(Manifest.permission.ACCESS_FINE_LOCATION)
                 .flatMapSingle { googleFitUseCase.importSleeps(context) }
-                .observeOn(Schedulers.io())
-                .flatMap { sleepUsecase.createSleeps(it) }
                 .singleOrError()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    showSleeps()
+                    val adapter = chartRecyclerView.adapter as SleepChartAdapter
+                    val oldItemCount = adapter.itemCount
+                    adapter.addNewerSleeps(it)
+                    adapter.notifyItemRangeInserted(oldItemCount, oldItemCount + adapter.sleepsToRowsCount(it))
                     progressBar.visibility = View.GONE
                     Snackbar.make(view, R.string.message_import_imported, Snackbar.LENGTH_LONG).show()
                 }, {
