@@ -4,7 +4,6 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 apply plugin: 'com.google.gms.google-services'
-apply from: "fabric.gradle"
 
 android {
     compileSdkVersion 28
@@ -19,7 +18,7 @@ android {
         targetSdkVersion 28
         versionCode 5
         versionName "0.4.0-alpha"
-        manifestPlaceholders = [fabric_io_id: "${fabric_key}"]
+        manifestPlaceholders = [fabric_io_id: "${System.getenv("SLEEPCHART_FABRIC_KEY")}"]
     }
     buildTypes {
         release {
