@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.os.Vibrator
@@ -36,7 +35,6 @@ import com.haru2036.sleepchart.domain.usecase.SleepUseCase
 import com.haru2036.sleepchart.extensions.addTo
 import com.haru2036.sleepchart.presentation.adapter.SleepChartAdapter
 import com.tbruyelle.rxpermissions2.RxPermissions
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -44,7 +42,6 @@ import kotlinx.android.synthetic.main.fragment_sleepchart.*
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
-import java.lang.IndexOutOfBoundsException
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -84,7 +81,6 @@ class SleepChartFragment : Fragment(){
         super.onActivityCreated(savedInstanceState)
         fab.setOnClickListener { toggleSleep() }
 
-
         sleepUsecase.isSleeping()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -95,8 +91,8 @@ class SleepChartFragment : Fragment(){
                             Timber.e(it)
                         }).addTo(disposables)
 
-        chartRecyclerView.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context).apply {
-            orientation = LinearLayoutManager.VERTICAL
+        chartRecyclerView.layoutManager = LinearLayoutManager(context).apply {
+            orientation = RecyclerView.VERTICAL
         }
 
         fab.setOnLongClickListener {
