@@ -20,6 +20,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
@@ -47,7 +48,7 @@ import javax.inject.Inject
 import kotlin.NoSuchElementException
 
 class SleepChartFragment : Fragment(){
-    private val chartRecyclerView: androidx.recyclerview.widget.RecyclerView by lazy { view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
+    private val chartRecyclerView: RecyclerView by lazy { view.findViewById<RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
     private val fab: FloatingActionButton by lazy { view.findViewById<FloatingActionButton>(R.id.fab) }
     private val chartView: LinearLayout by lazy { view.findViewById<LinearLayout>(R.id.fragment_sleepchart_main_container) }
     private val progressBar: ProgressBar by lazy { view.findViewById<ProgressBar>(R.id.fragment_sleepchart_progress)}
