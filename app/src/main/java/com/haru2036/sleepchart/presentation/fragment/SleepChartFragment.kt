@@ -55,7 +55,6 @@ class SleepChartFragment : Fragment(){
 
     private val disposables: CompositeDisposable = CompositeDisposable()
     private val GOOGLE_FIT_PERMISSION_REQUEST_CODE = 1
-    private var loading = false
 
     @Inject
     lateinit var sleepUsecase: SleepUseCase
