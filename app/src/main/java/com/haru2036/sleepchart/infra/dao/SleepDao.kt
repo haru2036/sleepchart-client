@@ -17,8 +17,6 @@ class SleepDao @Inject constructor(private val orma: OrmaHandler){
 
     fun sleeps() = orma.db.selectFromSleep().orderByStartAsc().executeAsObservable()
 
-    fun findSleepsWithRange(start: Date, count: Int) = orma.db.selectFromSleep().where("start < ?", start).orderByStartAsc().limit(count.toLong()).executeAsObservable()
-
     fun getOldestSleep() = orma.db.selectFromSleep().orderByStartAsc().executeAsObservable().firstOrError()
 
 }
