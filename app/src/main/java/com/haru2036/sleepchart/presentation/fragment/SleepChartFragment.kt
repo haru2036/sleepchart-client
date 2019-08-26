@@ -48,14 +48,13 @@ import javax.inject.Inject
 import kotlin.NoSuchElementException
 
 class SleepChartFragment : Fragment(){
-    private val chartRecyclerView: androidx.recyclerview.widget.RecyclerView by lazy { view.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
+    private val chartRecyclerView: RecyclerView by lazy { view.findViewById<RecyclerView>(R.id.fragment_sleepchart_recyclerview) }
     private val fab: FloatingActionButton by lazy { view.findViewById<FloatingActionButton>(R.id.fab) }
     private val chartView: LinearLayout by lazy { view.findViewById<LinearLayout>(R.id.fragment_sleepchart_main_container) }
     private val progressBar: ProgressBar by lazy { view.findViewById<ProgressBar>(R.id.fragment_sleepchart_progress)}
 
     private val disposables: CompositeDisposable = CompositeDisposable()
     private val GOOGLE_FIT_PERMISSION_REQUEST_CODE = 1
-    private var loading = false
 
     @Inject
     lateinit var sleepUsecase: SleepUseCase
@@ -224,13 +223,14 @@ class SleepChartFragment : Fragment(){
         progressBar.visibility = View.VISIBLE
         RxPermissions(activity).request(Manifest.permission.ACCESS_FINE_LOCATION)
                 .flatMapSingle { googleFitUseCase.importSleeps(context) }
-                .observeOn(Schedulers.io())
-                .flatMap { sleepUsecase.createSleeps(it) }
                 .singleOrError()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    showSleeps()
+                    val adapter = chartRecyclerView.adapter as SleepChartAdapter
+                    val oldItemCount = adapter.itemCount
+                    adapter.addNewerSleeps(it)
+                    adapter.notifyItemRangeInserted(oldItemCount, oldItemCount + adapter.sleepsToRowsCount(it))
                     progressBar.visibility = View.GONE
                     Snackbar.make(view, R.string.message_import_imported, Snackbar.LENGTH_LONG).show()
                 }, {

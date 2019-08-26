@@ -5,6 +5,7 @@ import com.haru2036.sleepchart.domain.entity.SleepSession
 import com.haru2036.sleepchart.infra.api.client.SleepClient
 import com.haru2036.sleepchart.infra.dao.SleepDao
 import com.haru2036.sleepchart.infra.dao.SleepSessionDao
+import io.reactivex.Observable
 import io.reactivex.Single
 import java.util.*
 import javax.inject.Inject
@@ -22,12 +23,11 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
     }
 
     fun fetchSleepsWithRange(start: Date, count: Int): Single<List<Sleep>> {
-        var result: List<Sleep> = listOf()
         return client.fetchSleepsWithRange(start, count)
                 .flatMap {
-                    result = it
                     sleepDao.create(it)
-                }.map { result.sortedBy { it.start } }
+                    Observable.just(it)
+                }.map { it.sortedBy { it.start } }
                 .firstOrError()
     }
 
