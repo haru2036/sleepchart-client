@@ -9,7 +9,6 @@ import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.infra.repository.SleepRepository
 import io.reactivex.Single
 import io.reactivex.SingleEmitter
-import io.reactivex.schedulers.Schedulers
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -20,8 +19,6 @@ class GoogleFitUseCase @Inject constructor(private val sleepRepository: SleepRep
                 .toList()
                 .map { it.apply { add(0, Sleep(0, Calendar.getInstance().apply { add(Calendar.WEEK_OF_YEAR, -1) }.time, Calendar.getInstance().apply { add(Calendar.WEEK_OF_YEAR, -1) }.time)) } }
                 .map{ Pair(it.last().end, Calendar.getInstance().time)}
-                .subscribeOn(Schedulers.io())
-                .observeOn(Schedulers.io())
                 .flatMap { requestToGoogleFit(context, it) }
                 .flatMapObservable { sleeps ->
                     sleepRepository.createSleeps(sleeps).map { sleeps }
