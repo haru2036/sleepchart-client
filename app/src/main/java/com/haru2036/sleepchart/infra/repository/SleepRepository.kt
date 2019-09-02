@@ -18,9 +18,8 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
 
     fun fetchSleepsWithRange(start: Date, count: Int): Single<List<Sleep>> {
         return client.fetchSleepsWithRange(start, count)
-                .flatMap {
-                    sleepDao.create(it)
-                    Observable.just(it)
+                .flatMap { sleeps ->
+                    sleepDao.create(sleeps).map { sleeps }
                 }.map { it.sortedBy { it.start } }
                 .firstOrError()
     }

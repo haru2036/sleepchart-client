@@ -222,7 +222,7 @@ class SleepChartFragment : Fragment(){
     private fun requestSleepsFromGoogleFit() {
         progressBar.visibility = View.VISIBLE
         RxPermissions(activity).request(Manifest.permission.ACCESS_FINE_LOCATION)
-                .flatMapSingle { googleFitUseCase.importSleeps(context) }
+                .flatMap { googleFitUseCase.importSleeps(context) }
                 .singleOrError()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
