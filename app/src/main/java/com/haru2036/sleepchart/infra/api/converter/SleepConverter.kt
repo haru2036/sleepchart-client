@@ -9,5 +9,5 @@ import java.text.SimpleDateFormat
  * Created by haru2036 on 2016/11/28.
  */
 object SleepConverter {
-    fun convert(result: SleepResponse) = Sleep(id = 0, start = result.csStart, end = result.csEnd)
+    fun convert(result: SleepResponse) = Sleep(id = 0, start = result.csStart, end = result.csEnd, rating = result.csResult)
 }
