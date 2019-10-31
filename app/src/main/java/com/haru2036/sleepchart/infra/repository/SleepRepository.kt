@@ -25,6 +25,8 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
                 .firstOrError()
     }
 
+    fun getSleepById(id: Long) = sleepDao.getSleepById(id)
+
     fun findSleeps() = sleepDao.sleeps()
 
     fun getOldestSleep() = sleepDao.getOldestSleep()

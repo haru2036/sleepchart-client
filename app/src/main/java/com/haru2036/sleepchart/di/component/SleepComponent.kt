@@ -11,7 +11,9 @@ import com.haru2036.sleepchart.infra.dao.GadgetBridgeDao
 import com.haru2036.sleepchart.infra.repository.GadgetBridgeRepository
 import com.haru2036.sleepchart.infra.repository.SleepRepository
 import com.haru2036.sleepchart.presentation.activity.MainActivity
+import com.haru2036.sleepchart.presentation.activity.SleepDetailActivity
 import com.haru2036.sleepchart.presentation.fragment.SleepChartFragment
+import com.haru2036.sleepchart.presentation.presenter.SleepDetailPresenter
 import dagger.Subcomponent
 
 /**
@@ -22,6 +24,10 @@ import dagger.Subcomponent
 interface SleepComponent{
 
     fun inject(activity: LoginActivity)
+
+    fun inject(activity: SleepDetailActivity)
+
+    fun inject(presenter: SleepDetailPresenter)
 
     fun inject(service: SleepService)
 

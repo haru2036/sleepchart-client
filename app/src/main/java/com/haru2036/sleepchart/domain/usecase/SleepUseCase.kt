@@ -25,6 +25,8 @@ class SleepUseCase @Inject constructor(private val repository: SleepRepository) 
         return repository.fetchSleepsWithRange(Calendar.getInstance().time, 40)
     }
 
+    fun getSleepById(id: Long) = repository.getSleepById(id)
+
     fun createSleeps(sleeps: List<Sleep>) = repository.createSleeps(sleeps)
 
     fun findSleeps() = repository.findSleeps()

@@ -21,6 +21,7 @@ class TimeChartView @JvmOverloads constructor(context: Context, attrs: Attribute
     val dayInSec: Int = 86400
     //18時始まりにするためのオフセット
     val nightOffsetHours: Int = 4
+    var onSleepClickListener: ((Sleep) -> Unit)? = null
     var windowWidth = 0
     var sleeps: List<Sleep> = emptyList()
     set(value) {
@@ -34,6 +35,7 @@ class TimeChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
     }
+
 
     fun clearAllSleeps(){
         removeAllViews()
@@ -50,6 +52,9 @@ class TimeChartView @JvmOverloads constructor(context: Context, attrs: Attribute
         val longPx = endPx - startPx
 
         val sleepView = Button(context)
+        sleepView.setOnClickListener {
+            onSleepClickListener?.invoke(sleep)
+        }
         sleepView.setBackgroundColor(context.getColor(R.color.sleepColor))
         sleepView.text = SimpleDateFormat("MM/dd HH:mm ~", Locale.JAPAN).format(sleep.start)
         val layoutParams = if(sleepView.layoutParams == null){

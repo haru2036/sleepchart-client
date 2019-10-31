@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.domain.entity.Sleep
 import com.haru2036.sleepchart.presentation.TimeChartView
+import com.haru2036.sleepchart.presentation.activity.SleepDetailActivity
 import org.threeten.bp.DateTimeUtils
 import org.threeten.bp.ZoneId
 import java.util.*
@@ -19,6 +20,7 @@ class SleepChartAdapter(val context: Context) : RecyclerView.Adapter<SleepChartA
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val view = holder?.itemView as TimeChartView
         view.clearAllSleeps()
+        view.onSleepClickListener = {sleep: Sleep -> SleepDetailActivity.start(context, sleep)}
         view.sleeps = sleepsOfDays.toList()[position].second
         Calendar.getInstance().apply {
             time = view.sleeps.first().end
