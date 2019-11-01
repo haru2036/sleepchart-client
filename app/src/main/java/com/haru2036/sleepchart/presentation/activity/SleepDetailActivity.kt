@@ -3,7 +3,6 @@ package com.haru2036.sleepchart.presentation.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.haru2036.sleepchart.R
@@ -32,8 +31,8 @@ class SleepDetailActivity : AppCompatActivity(){
     @Inject
     lateinit var presenter: SleepDetailPresenter
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sleep_detail)
         SleepChart.getAppComponent().plus(SleepModule()).inject(this)
         compositeDisposable.add(presenter.loadSleep(intent.getLongExtra("sleep_id",-1))
