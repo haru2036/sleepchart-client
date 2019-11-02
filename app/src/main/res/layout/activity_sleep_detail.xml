@@ -1,60 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <LinearLayout
+    >
+    <data>
+        <variable
+            name="viewmodel"
+            type="com.haru2036.sleepchart.presentation.viewmodel.SleepDetailViewModel" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/activity_sleep_detail_timechart_container"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <com.haru2036.sleepchart.presentation.TimeChartView
-            android:id="@+id/activity_sleep_detail_timechart"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="80dp" />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/activity_sleep_detail_timechart_container"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/activity_sleep_detail_start_time"
-        android:textSize="24sp"
-        tools:text="24:00"
-        app:layout_constraintEnd_toStartOf="@id/activity_sleep_detail_delimiter"
-        app:layout_constraintBottom_toBottomOf="@id/activity_sleep_detail_delimiter"
-        app:layout_constraintTop_toTopOf="@id/activity_sleep_detail_delimiter"
-        />
+            <com.haru2036.sleepchart.presentation.TimeChartView
+                android:id="@+id/activity_sleep_detail_timechart"
+                android:layout_width="match_parent"
+                android:layout_height="80dp" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/activity_sleep_detail_delimiter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="~"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_sleep_detail_timechart_container" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/activity_sleep_detail_end_time"
-        android:textSize="24sp"
-        tools:text="05:00"
-        app:layout_constraintTop_toTopOf="@id/activity_sleep_detail_delimiter"
-        app:layout_constraintStart_toEndOf="@id/activity_sleep_detail_delimiter"
-        app:layout_constraintBottom_toBottomOf="@id/activity_sleep_detail_delimiter"
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_sleep_detail_start_time"
+            android:textSize="24sp"
+            android:text="@{viewmodel.formattedSleepStart}"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
+            app:layout_constraintEnd_toStartOf="@id/activity_sleep_detail_delimiter"
+            app:layout_constraintBottom_toBottomOf="@id/activity_sleep_detail_delimiter"
+            app:layout_constraintTop_toTopOf="@id/activity_sleep_detail_delimiter"
+            />
 
-    <androidx.appcompat.widget.AppCompatRatingBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/activity_sleep_detail_rating_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_sleep_detail_delimiter" />
+        <TextView
+            android:id="@+id/activity_sleep_detail_delimiter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="~"
+            android:textSize="32sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/activity_sleep_detail_timechart_container" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_sleep_detail_end_time"
+            android:textSize="24sp"
+            android:text="@{viewmodel.formattedSleepEnd}"
+            tools:text="05:00"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            app:layout_constraintTop_toTopOf="@id/activity_sleep_detail_delimiter"
+            app:layout_constraintStart_toEndOf="@id/activity_sleep_detail_delimiter"
+            app:layout_constraintBottom_toBottomOf="@id/activity_sleep_detail_delimiter"
+            />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatRatingBar
+            android:id="@+id/activity_sleep_detail_rating_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="@dimen/activity_vertical_margin"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

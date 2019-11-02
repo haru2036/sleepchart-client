@@ -3,18 +3,15 @@ package com.haru2036.sleepchart.presentation.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.haru2036.sleepchart.R
 import com.haru2036.sleepchart.app.SleepChart
+import com.haru2036.sleepchart.databinding.ActivitySleepDetailBinding
 import com.haru2036.sleepchart.di.module.SleepModule
 import com.haru2036.sleepchart.domain.entity.Sleep
-import com.haru2036.sleepchart.presentation.presenter.SleepDetailPresenter
-import io.reactivex.android.schedulers.AndroidSchedulers
+import com.haru2036.sleepchart.presentation.viewmodel.SleepDetailViewModel
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_sleep_detail.*
-import timber.log.Timber
 import javax.inject.Inject
 
 class SleepDetailActivity : AppCompatActivity(){
@@ -27,30 +24,21 @@ class SleepDetailActivity : AppCompatActivity(){
         }
     }
 
+
     val compositeDisposable = CompositeDisposable()
+
+    val binding: ActivitySleepDetailBinding by lazy { DataBindingUtil.setContentView<ActivitySleepDetailBinding>(this, R.layout.activity_sleep_detail) }
+
     @Inject
-    lateinit var presenter: SleepDetailPresenter
+    lateinit var sleepDetailViewModel: SleepDetailViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sleep_detail)
         SleepChart.getAppComponent().plus(SleepModule()).inject(this)
-        compositeDisposable.add(presenter.loadSleep(intent.getLongExtra("sleep_id",-1))
-                .singleOrError()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    //todo: フォーマットは暫定対応
-                    activity_sleep_detail_timechart.sleeps = listOf(it)
-                    activity_sleep_detail_start_time.text = it.start.toLocaleString()
-                    activity_sleep_detail_end_time.text = it.end.toLocaleString()
-                    it.rating?.let { activity_sleep_detail_rating_bar.rating = it.toFloat()
-                    }
-                },{
-                    Timber.e(it)
-                    Toast.makeText(this, "その睡眠は存在しません", Toast.LENGTH_LONG).show()
-                    finish()
-                }))
+        binding.viewmodel = sleepDetailViewModel
+        sleepDetailViewModel.loadSleep(intent.getLongExtra("sleep_id", -1))
+
     }
 
     override fun onDestroy() {
