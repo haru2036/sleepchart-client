@@ -6,4 +6,4 @@ import java.util.*
 data class SleepResponse(  val csId: Long?
                          , val csStart: Date
                          , val csEnd: Date
-                         , val csResult: Int?)
+                         , val csRating: Float?)

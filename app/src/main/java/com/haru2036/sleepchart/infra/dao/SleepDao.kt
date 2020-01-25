@@ -20,4 +20,6 @@ class SleepDao @Inject constructor(private val orma: OrmaHandler){
 
     fun getSleepById(id: Long) = orma.db.selectFromSleep().idEq(id).executeAsObservable()
 
+    fun update(sleep: Sleep)= orma.db.relationOfSleep().upsert(sleep)
+
 }

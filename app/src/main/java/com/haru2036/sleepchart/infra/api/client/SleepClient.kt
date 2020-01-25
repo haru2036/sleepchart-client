@@ -21,4 +21,7 @@ open class SleepClient @Inject constructor(private val service: SleepService){
 
     open fun putSleeps(sleeps: List<Sleep>) = service.postSleeps(sleeps)
             .map { it.map { SleepConverter.convert(it) } }
+
+    open fun postSleepWithId(csId:Long, sleep: Sleep) = service.postSleepWithId(csId, sleep)
+            .map { SleepConverter.convert(it )}
 }

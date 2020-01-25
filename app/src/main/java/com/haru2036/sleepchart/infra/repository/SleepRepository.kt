@@ -5,6 +5,7 @@ import com.haru2036.sleepchart.domain.entity.SleepSession
 import com.haru2036.sleepchart.infra.api.client.SleepClient
 import com.haru2036.sleepchart.infra.dao.SleepDao
 import com.haru2036.sleepchart.infra.dao.SleepSessionDao
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -38,6 +39,8 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
 
+fun updateSleep(csId: Long, sleep: Sleep): Observable<Sleep> = client.postSleepWithId(csId, sleep)
+            .map { sleepDao.update(it) }
 
     fun deleteSleep(id: Long) = sleepDao.deleteById(id)
 

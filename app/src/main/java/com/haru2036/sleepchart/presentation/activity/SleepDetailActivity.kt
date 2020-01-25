@@ -38,7 +38,13 @@ class SleepDetailActivity : AppCompatActivity(){
         SleepChart.getAppComponent().plus(SleepModule()).inject(this)
         binding.viewmodel = sleepDetailViewModel
         sleepDetailViewModel.loadSleep(intent.getLongExtra("sleep_id", -1))
+        binding.activitySleepDetailRatingBar.setOnRatingBarChangeListener { _, rating, _ ->  binding.viewmodel!!.sleepRating.onNext(rating)}
 
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.viewmodel?.saveSleep()
     }
 
     override fun onDestroy() {
