@@ -16,7 +16,7 @@ import javax.inject.Inject
 class SleepDetailViewModel @Inject constructor(private val usecase: SleepUseCase) : ViewModel() {
     var sleep: Sleep? = null
 
-    val disposables = CompositeDisposable()
+    private val disposables = CompositeDisposable()
 
     var formattedSleepStart = ObservableField<String>()
     var formattedSleepEnd = ObservableField<String>()
@@ -32,7 +32,7 @@ class SleepDetailViewModel @Inject constructor(private val usecase: SleepUseCase
                     sleep = it
                     formattedSleepStart.set(SimpleDateFormat("MM/dd\nHH:mm", Locale.getDefault()).format(it.start))
                     formattedSleepEnd.set(SimpleDateFormat("MM/dd\nHH:mm", Locale.getDefault()).format(it.end))
-                    it.rating?.let { sleepRating.onNext(it) }
+                    it.rating?.let { sleepRating.onNext(it.toFloat()) }
                 },{
                     Timber.e(it)
                 })
@@ -42,16 +42,15 @@ class SleepDetailViewModel @Inject constructor(private val usecase: SleepUseCase
 
     fun saveSleep() {
         sleep?.let {
-            it.rating = sleepRating.value
+            it.rating = sleepRating.value?.toInt()
             disposables.add(
-                    usecase.updateSleep(it.csId!!, it)
+                    usecase.updateSleep(it)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe()
             )
         }
     }
-
     override fun onCleared() {
         super.onCleared()
         disposables.clear()

@@ -18,5 +18,5 @@ data class Sleep(
         @Column @Setter("end") @Json(name = "csEnd")
         var end: Date,
         @Column @Setter("rating") @Json(name = "csRating")
-        var rating: Float? = null
+        var rating: Int? = null
 )

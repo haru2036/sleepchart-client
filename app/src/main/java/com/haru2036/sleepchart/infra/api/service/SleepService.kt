@@ -19,6 +19,6 @@ interface SleepService {
     @POST("sleeps")
     fun postSleeps(@Body sleeps: List<Sleep>): Observable<List<SleepResponse>>
 
-    @POST("sleeps/{id}")
-    fun postSleepWithId(@Path("id") id: Long, @Body sleep: Sleep): Observable<SleepResponse>
+    @PUT("sleeps")
+    fun putSleep(@Body sleep: Sleep): Observable<SleepResponse>
 }
