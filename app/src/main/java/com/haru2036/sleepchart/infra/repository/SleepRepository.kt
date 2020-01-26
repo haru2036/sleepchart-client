@@ -39,8 +39,8 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
 
-fun updateSleep(sleep: Sleep): Observable<Sleep> = client.putSleep(sleep)
-            .map { sleepDao.update(it) }
+    fun updateSleep(sleep: Sleep): Observable<Sleep> = client.putSleep(sleep)
+            .map { sleepDao.update(it.apply { id = sleep.id }) }
 
     fun deleteSleep(id: Long) = sleepDao.deleteById(id)
 

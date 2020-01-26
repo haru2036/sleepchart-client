@@ -16,11 +16,10 @@ import javax.inject.Inject
 
 class SleepDetailActivity : AppCompatActivity(){
     companion object {
-        fun start(context: Context, sleep: Sleep) {
-            val intent = Intent(context, SleepDetailActivity::class.java).apply {
+        fun createIntent(context: Context, sleep: Sleep): Intent {
+            return Intent(context, SleepDetailActivity::class.java).apply {
                 putExtra("sleep_id", sleep.id)
             }
-            context.startActivity(intent)
         }
     }
 
@@ -38,7 +37,6 @@ class SleepDetailActivity : AppCompatActivity(){
         SleepChart.getAppComponent().plus(SleepModule()).inject(this)
         binding.viewmodel = sleepDetailViewModel
         sleepDetailViewModel.loadSleep(intent.getLongExtra("sleep_id", -1))
-        binding.activitySleepDetailRatingBar.setOnRatingBarChangeListener { _, rating, _ ->  binding.viewmodel!!.sleepRating.onNext(rating)}
 
     }
 

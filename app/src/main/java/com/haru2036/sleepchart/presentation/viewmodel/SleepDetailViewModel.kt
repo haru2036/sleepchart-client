@@ -7,7 +7,7 @@ import com.haru2036.sleepchart.domain.usecase.SleepUseCase
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
+import jp.keita.kagurazaka.rxproperty.RxProperty
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,9 +18,9 @@ class SleepDetailViewModel @Inject constructor(private val usecase: SleepUseCase
 
     private val disposables = CompositeDisposable()
 
-    var formattedSleepStart = ObservableField<String>()
-    var formattedSleepEnd = ObservableField<String>()
-    var sleepRating = BehaviorSubject.create<Float>()
+    val formattedSleepStart = ObservableField<String>()
+    val formattedSleepEnd = ObservableField<String>()
+    val sleepRating = RxProperty<Float>()
 
     fun loadSleep(id: Long) {
         disposables.add(usecase.getSleepById(id)
@@ -32,7 +32,7 @@ class SleepDetailViewModel @Inject constructor(private val usecase: SleepUseCase
                     sleep = it
                     formattedSleepStart.set(SimpleDateFormat("MM/dd\nHH:mm", Locale.getDefault()).format(it.start))
                     formattedSleepEnd.set(SimpleDateFormat("MM/dd\nHH:mm", Locale.getDefault()).format(it.end))
-                    it.rating?.let { sleepRating.onNext(it.toFloat()) }
+                    sleepRating.set((it.rating?:0).toFloat())
                 },{
                     Timber.e(it)
                 })
@@ -42,7 +42,7 @@ class SleepDetailViewModel @Inject constructor(private val usecase: SleepUseCase
 
     fun saveSleep() {
         sleep?.let {
-            it.rating = sleepRating.value?.toInt()
+            it.rating = sleepRating.get().toInt()
             disposables.add(
                     usecase.updateSleep(it)
                         .subscribeOn(Schedulers.io())
