@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             Constants.REQUEST_IMPORT -> fragment.showSleeps()
+            Constants.SLEEP_DETAIL -> fragment.showSleeps()
         }
     }
 }

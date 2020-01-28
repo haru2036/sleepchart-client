@@ -17,7 +17,7 @@ class GoogleFitUseCase @Inject constructor(private val sleepRepository: SleepRep
     fun importSleeps(context: Context) =
         sleepRepository.findSleeps()
                 .toList()
-                .map { it.apply { add(0, Sleep(0, Calendar.getInstance().apply { add(Calendar.WEEK_OF_YEAR, -1) }.time, Calendar.getInstance().apply { add(Calendar.WEEK_OF_YEAR, -1) }.time)) } }
+                .map { it.apply { add(0, Sleep(id = 0, start = Calendar.getInstance().apply { add(Calendar.WEEK_OF_YEAR, -1) }.time, end = Calendar.getInstance().apply { add(Calendar.WEEK_OF_YEAR, -1) }.time)) } }
                 .map{ Pair(it.last().end, Calendar.getInstance().time)}
                 .flatMap { requestToGoogleFit(context, it) }
                 .flatMapObservable { sleeps ->
@@ -36,7 +36,7 @@ class GoogleFitUseCase @Inject constructor(private val sleepRepository: SleepRep
                     .readSession(readRequest)
                     .addOnSuccessListener {
                         emitter.onSuccess(it.sessions.filter { it.activity == "sleep" }.map{
-                            Sleep(0, Date(it.getStartTime(TimeUnit.MILLISECONDS)), Date(it.getEndTime(TimeUnit.MILLISECONDS)))
+                            Sleep(id = 0, start = Date(it.getStartTime(TimeUnit.MILLISECONDS)), end = Date(it.getEndTime(TimeUnit.MILLISECONDS)))
                         })
                     }
                     .addOnFailureListener { emitter.onError(it) }

@@ -54,11 +54,7 @@ class AppModule(private val application: SleepChart){
 
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        val url = if (BuildConfig.SERVER_PRODUCTION) {
-            "https://sleepchart.haru2036.com/api/"
-        } else {
-            "https://sleepchart-stage.haru2036.com/api/"
-        }
+        val url = BuildConfig.SERVER_URL
         return Retrofit.Builder()
             .client(okHttpClient)
                 .baseUrl(url)

@@ -100,7 +100,7 @@ class SleepChartFragment : Fragment(){
             trackSleepTwice()
         }
 
-        chartRecyclerView.adapter = SleepChartAdapter(context)
+        chartRecyclerView.adapter = SleepChartAdapter(activity)
         if (activity.intent.getBooleanExtra("NEEDS_RESTORE", false)) {
             restoreLatestSleeps()
         }

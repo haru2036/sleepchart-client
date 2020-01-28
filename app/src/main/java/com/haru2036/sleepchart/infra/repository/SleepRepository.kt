@@ -5,6 +5,7 @@ import com.haru2036.sleepchart.domain.entity.SleepSession
 import com.haru2036.sleepchart.infra.api.client.SleepClient
 import com.haru2036.sleepchart.infra.dao.SleepDao
 import com.haru2036.sleepchart.infra.dao.SleepSessionDao
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -25,6 +26,8 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
                 .firstOrError()
     }
 
+    fun getSleepById(id: Long) = sleepDao.getSleepById(id)
+
     fun findSleeps() = sleepDao.sleeps()
 
     fun getOldestSleep() = sleepDao.getOldestSleep()
@@ -32,10 +35,12 @@ open class SleepRepository @Inject constructor(private val client: SleepClient,
     fun findSleepSession() = sleepSessionDao.sleepSessions()
 
     fun createSleeps(sleeps: List<Sleep>) =
-            client.putSleeps(sleeps).flatMap { sleepDao.create(sleeps) }
+            client.postSleeps(sleeps).flatMap { sleepDao.create(sleeps) }
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
 
+    fun updateSleep(sleep: Sleep): Observable<Sleep> = client.putSleep(sleep)
+            .map { sleepDao.update(it.apply { id = sleep.id }) }
 
     fun deleteSleep(id: Long) = sleepDao.deleteById(id)
 

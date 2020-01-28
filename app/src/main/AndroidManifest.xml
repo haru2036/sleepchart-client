@@ -23,6 +23,8 @@
         </activity>
         <activity android:name=".presentation.activity.MainActivity">
         </activity>
+        <activity android:name=".presentation.activity.SleepDetailActivity">
+        </activity>
         <activity
             android:name=".presentation.activity.SettingsActivity"
             android:label="@string/title_menu_setting"

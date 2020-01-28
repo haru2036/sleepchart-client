@@ -36,12 +36,12 @@ android {
     productFlavors {
         production {
             dimension "version"
-            buildConfigField "boolean", "SERVER_PRODUCTION", "true"
+            buildConfigField "String", "SERVER_URL", "\"https://sleepchart.haru2036.com/api/\""
         }
         stage {
             dimension "version"
             applicationIdSuffix ".stage"
-            buildConfigField "boolean", "SERVER_PRODUCTION", "false"
+            buildConfigField "String", "SERVER_URL", "\"https://sleepchart-stage.haru2036.com/api/\""
         }
     }
 
@@ -122,10 +122,16 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation 'com.google.firebase:firebase-auth:17.0.0'
 
+    implementation 'com.github.k-kagurazaka.rx-property-android:rx-property:4.0.0'
+
+    // If you want to use Kotlin syntax
+    implementation 'com.github.k-kagurazaka.rx-property-android:rx-property-kotlin:4.0.0'
 
 }
 repositories {
     mavenCentral()
     google()
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "https://jitpack.io" }
+
 }

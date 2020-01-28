@@ -25,6 +25,11 @@ class SleepUseCase @Inject constructor(private val repository: SleepRepository) 
         return repository.fetchSleepsWithRange(Calendar.getInstance().time, 40)
     }
 
+    fun updateSleep (sleep: Sleep): Observable<Sleep> {
+        return repository.updateSleep(sleep)
+    }
+    fun getSleepById(id: Long) = repository.getSleepById(id)
+
     fun createSleeps(sleeps: List<Sleep>) = repository.createSleeps(sleeps)
 
     fun findSleeps() = repository.findSleeps()
@@ -43,7 +48,7 @@ class SleepUseCase @Inject constructor(private val repository: SleepRepository) 
                         .subscribeOn(Schedulers.io())
                         .flatMap { sleepSession ->
                             repository.deleteSleepSession(sleepSession)
-                            repository.createSleeps(listOf(Sleep(0, sleepSession.start, date)))
+                            repository.createSleeps(listOf(Sleep(id = 0, start = sleepSession.start, end = date)))
                         }.map { isSleeping }
             }
         }
@@ -52,7 +57,7 @@ class SleepUseCase @Inject constructor(private val repository: SleepRepository) 
     fun trackSleepTwice(): Observable<Long> = repository.findSleeps()
                 .toList()
                 .map { it.last().end }
-            .flatMapObservable { repository.createSleeps(listOf(Sleep(0, it, Calendar.getInstance().time))) }
+            .flatMapObservable { repository.createSleeps(listOf(Sleep(id = 0, start = it, end = Calendar.getInstance().time))) }
 
     fun deleteSleep(id: Long) = repository.deleteSleep(id)
 }

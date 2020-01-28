@@ -12,6 +12,7 @@ import com.haru2036.sleepchart.infra.dao.SleepSessionDao
 import com.haru2036.sleepchart.infra.repository.GadgetBridgeRepository
 import com.haru2036.sleepchart.infra.repository.SharedPreferencesRepository
 import com.haru2036.sleepchart.infra.repository.SleepRepository
+import com.haru2036.sleepchart.presentation.viewmodel.SleepDetailViewModel
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
@@ -22,6 +23,9 @@ import retrofit2.Retrofit
 
 @Module
 class SleepModule{
+
+    @Provides
+    fun provideSleepDetailViewModel(sleepUseCase: SleepUseCase) = SleepDetailViewModel(sleepUseCase)
 
     @Provides
     fun provideSleepDao(ormaHandler: OrmaHandler) = SleepDao(ormaHandler)
