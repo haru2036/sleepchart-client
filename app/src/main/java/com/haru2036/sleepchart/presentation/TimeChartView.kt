@@ -56,7 +56,7 @@ class TimeChartView @JvmOverloads constructor(context: Context, attrs: Attribute
             onSleepClickListener?.invoke(sleep)
         }
         sleepView.setBackgroundColor(context.getColor(R.color.sleepColor))
-        sleepView.text = SimpleDateFormat("MM/dd HH:mm ~", Locale.JAPAN).format(sleep.start)
+        sleepView.text = (sleep.rating?.let{ "☆$it : "} ?: "") + SimpleDateFormat("MM/dd HH:mm ~", Locale.JAPAN).format(sleep.start)
         val layoutParams = if(sleepView.layoutParams == null){
             RelativeLayout.LayoutParams(longPx, ViewGroup.LayoutParams.MATCH_PARENT)
         }else{
